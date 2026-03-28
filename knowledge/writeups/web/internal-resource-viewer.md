@@ -1,10 +1,14 @@
+---
+title: "Internal Resource Viewer"
+category: web
+slug: internal-resource-viewer
+created: 2026-03-28
+status: draft
+tags:
+  []
+doc_kind: writeup
+---
 # Internal Resource Viewer
-
-- Category: web
-- Slug: internal-resource-viewer
-- Created: 2026-03-28
-- Status: draft
-- Tags:
 
 ## Challenge Summary
 

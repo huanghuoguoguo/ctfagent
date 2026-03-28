@@ -62,14 +62,17 @@ Do not start with long exploit payloads or broad guessing. Default to short vali
 Current implemented Skills:
 
 1. `ctf-solver-profile/` - Front-door solver posture, evidence-first reasoning, category switching rules
-2. `web-ssrf-to-rce-triage/` - Web SSRF, local file read, source disclosure, and localhost pivot workflow
-3. `ctf-knowledge-capture/` - Save solved cases and reusable patterns into organized Markdown notes
+2. `challenge-workspace-bootstrap/` - Normalize a new challenge into `workspaces/<challenge-id>/` before solving
+3. `web-ssrf-to-rce-triage/` - Web SSRF, local file read, source disclosure, and localhost pivot workflow
+4. `web-sqli-triage/` - Web SQL injection triage with boolean oracle validation and SQLite blind extraction helpers
+5. `ctf-knowledge-capture/` - Save solved cases and reusable patterns into organized Markdown notes
 
 Recommended invocation order:
 
-1. `ctf-solver-profile`
-2. one category skill such as `web-ssrf-to-rce-triage`
-3. `ctf-knowledge-capture` after solving or when consolidating findings
+1. `challenge-workspace-bootstrap` when a challenge is not yet normalized into `workspaces/<challenge-id>/`
+2. `ctf-solver-profile`
+3. one category skill such as `web-ssrf-to-rce-triage` or `web-sqli-triage`
+4. `ctf-knowledge-capture` after solving or when consolidating findings
 
 ## Skill Categories to Create Next
 
@@ -135,7 +138,9 @@ When implementing Phase 2 Python automation, prioritize these custom tools:
 - Phase 2 architecture: `docs/phase2-agent-sdk-python-automation.md`
 - SDK notes: `docs/agent-sdk-official-notes.md`
 - Master index: `docs/claude-agent-sdk-ctf-agent-design.md`
+- Workspace bootstrap script: `scripts/init_challenge.py`
 - Solver profile: `.claude/skills/ctf-solver-profile/SKILL.md`
+- Workspace bootstrap: `.claude/skills/challenge-workspace-bootstrap/SKILL.md`
 - Knowledge capture: `.claude/skills/ctf-knowledge-capture/SKILL.md`
 
 ## Environment Configuration

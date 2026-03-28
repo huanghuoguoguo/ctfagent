@@ -1,10 +1,19 @@
+---
+title: "Obfuscated assert GET RCE"
+category: web
+slug: obfuscated-assert-get-rce
+created: 2026-03-28
+status: active
+tags:
+  - php
+  - assert
+  - rce
+  - webshell
+  - blank-page
+  - obfuscation
+doc_kind: pattern
+---
 # Obfuscated assert GET RCE
-
-- Category: web
-- Slug: obfuscated-assert-get-rce
-- Created: 2026-03-28
-- Status: active
-- Tags: php, assert, rce, webshell, blank-page, obfuscation
 
 ## Chain Summary
 

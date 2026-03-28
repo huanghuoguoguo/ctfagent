@@ -2,6 +2,13 @@
 
 Use the generated templates as the default format. Keep sections stable so agents can grep and compare notes across challenges.
 
+## Metadata Rules
+
+- Every note should start with frontmatter.
+- Keep these keys stable when available:
+  `doc_kind`, `title`, `category`, `slug`, `created`, `status`, `tags`
+- Treat Markdown body text as human-readable evidence and frontmatter as agent-queryable metadata.
+
 ## Writeup Template Intent
 
 - `Challenge Summary`: identify the target and the win condition.

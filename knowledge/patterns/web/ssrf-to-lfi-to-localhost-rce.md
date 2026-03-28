@@ -1,10 +1,14 @@
+---
+title: "SSRF to LFI to Localhost RCE"
+category: web
+slug: ssrf-to-lfi-to-localhost-rce
+created: 2026-03-28
+status: draft
+tags:
+  []
+doc_kind: pattern
+---
 # SSRF to LFI to Localhost RCE
-
-- Category: web
-- Slug: ssrf-to-lfi-to-localhost-rce
-- Created: 2026-03-28
-- Status: draft
-- Tags:
 
 ## Chain Summary
 

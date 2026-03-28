@@ -14,6 +14,8 @@ Use this skill after solving or reviewing a challenge. The goal is not to write 
 
 Always save notes to local Markdown files under `knowledge/`.
 
+Use frontmatter metadata consistently so future agents can query notes by `doc_kind`, `category`, `status`, and `tags`.
+
 ## Output Layout
 
 Use this structure:
@@ -73,6 +75,12 @@ python3 .claude/skills/ctf-knowledge-capture/scripts/new_note.py \
 ```
 
 Read `references/templates.md` when you need the exact section meanings.
+
+Find related notes quickly with:
+
+```bash
+python3 scripts/query_markdown.py --kind writeup --category web --tag ssrf
+```
 
 ## Writeup Rules
 

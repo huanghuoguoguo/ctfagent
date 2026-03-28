@@ -1,20 +1,33 @@
 #!/usr/bin/env python3
 import argparse
 import datetime as dt
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[4]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ctfagent.markdown import dump_frontmatter
 
 
 CATEGORIES = ["web", "pwn", "rev", "crypto", "misc", "forensics"]
 
 
 def build_writeup(title: str, category: str, slug: str, created: str) -> str:
-    return f"""# {title}
-
-- Category: {category}
-- Slug: {slug}
-- Created: {created}
-- Status: draft
-- Tags:
+    frontmatter = dump_frontmatter(
+        {
+            "doc_kind": "writeup",
+            "title": title,
+            "category": category,
+            "slug": slug,
+            "created": created,
+            "status": "draft",
+            "tags": [],
+        }
+    )
+    return f"""{frontmatter}
+# {title}
 
 ## Challenge Summary
 
@@ -63,13 +76,19 @@ def build_writeup(title: str, category: str, slug: str, created: str) -> str:
 
 
 def build_pattern(title: str, category: str, slug: str, created: str) -> str:
-    return f"""# {title}
-
-- Category: {category}
-- Slug: {slug}
-- Created: {created}
-- Status: draft
-- Tags:
+    frontmatter = dump_frontmatter(
+        {
+            "doc_kind": "pattern",
+            "title": title,
+            "category": category,
+            "slug": slug,
+            "created": created,
+            "status": "draft",
+            "tags": [],
+        }
+    )
+    return f"""{frontmatter}
+# {title}
 
 ## Chain Summary
 
