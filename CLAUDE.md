@@ -4,10 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**CTFAgent** is a CTF (Capture The Flag) automation system using Claude Code and Claude Agent SDK. The project follows a two-phase approach:
-
-- **Phase 1** (Current): Direct Claude Code usage for CTF workflow validation
-- **Phase 2** (Future): Python automation with Claude Agent SDK
+**CTFAgent** is a CTF (Capture The Flag) workspace centered on Claude Code. The current focus is interactive solving, reusable skills, local tooling, knowledge capture, and regression targets.
 
 ## Naming Conventions
 
@@ -23,10 +20,10 @@ Use these exact terms in all documentation and code:
 ```
 ctfagent/
 ├── docs/                   # Architecture documentation
-│   ├── claude-agent-sdk-ctf-agent-design.md    # Master index
-│   ├── phase1-claude-code-ctf-workflow.md      # Phase 1 guide
-│   ├── phase2-agent-sdk-python-automation.md   # Phase 2 guide
-│   └── agent-sdk-official-notes.md             # SDK reference
+│   ├── README.md                               # Docs entry point
+│   ├── claude-agent-sdk-ctf-agent-design.md    # Current design overview
+│   ├── phase1-claude-code-ctf-workflow.md      # Current workflow
+│   └── challenge-package-and-platform-interface.md # Workspace and boundary rules
 ├── .claude/
 │   ├── skills/            # Active CTF skills/playbooks
 │   └── settings.local.json # Local settings with env vars and permissions
@@ -35,9 +32,9 @@ ctfagent/
 └── .mcp.json             # MCP server configuration (future)
 ```
 
-## Phase 1 Development Mode
+## Current Development Mode
 
-Currently in Phase 1: Validate Claude Code can solve CTF challenges interactively before building automation.
+Currently centered on Claude Code: solve challenges interactively, harden the workflow, and accumulate reusable skills and knowledge before adding more system complexity.
 
 Key aspects:
 - Each challenge gets an isolated workspace under `workspaces/<challenge-id>/`
@@ -121,9 +118,9 @@ Current web examples:
 
 When a challenge is solved, update the writeup first. Only update a pattern or a Skill when the lesson generalizes.
 
-## Custom Tools (Phase 2)
+## Custom Tools (Future)
 
-When implementing Phase 2 Python automation, prioritize these custom tools:
+If later automation becomes necessary, prioritize these custom tools:
 
 1. `init_challenge` - Create workspace, download/extract attachments
 2. `submit_flag` - Submit to platform without exposing token
@@ -134,10 +131,10 @@ When implementing Phase 2 Python automation, prioritize these custom tools:
 
 ## Documentation References
 
-- Phase 1 workflow: `docs/phase1-claude-code-ctf-workflow.md`
-- Phase 2 architecture: `docs/phase2-agent-sdk-python-automation.md`
-- SDK notes: `docs/agent-sdk-official-notes.md`
-- Master index: `docs/claude-agent-sdk-ctf-agent-design.md`
+- Docs entry: `docs/README.md`
+- Current workflow: `docs/phase1-claude-code-ctf-workflow.md`
+- Current design overview: `docs/claude-agent-sdk-ctf-agent-design.md`
+- Workspace boundary: `docs/challenge-package-and-platform-interface.md`
 - Workspace bootstrap script: `scripts/init_challenge.py`
 - Solver profile: `.claude/skills/ctf-solver-profile/SKILL.md`
 - Workspace bootstrap: `.claude/skills/challenge-workspace-bootstrap/SKILL.md`

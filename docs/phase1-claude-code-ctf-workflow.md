@@ -1,227 +1,181 @@
-# 第一阶段：直接使用 Claude Code 的 CTF 工作流
+# 当前工作流：直接用 Claude Code 解题
 
 更新时间：2026-03-28
 
 ## 目标
 
-这一阶段不写 Python 宿主程序，直接使用 `Claude Code`。
+当前工作流解决的是：如何让 `Claude Code` 在真实 CTF 场景里，稳定地完成单题分析、工具调用、知识回查和结果沉淀。
 
-你要做的是：
+这不是“全自动跑题”流程，而是一条高反馈、可验证、可积累的对话式工作流。
 
-- 启动 `Claude Code`
-- 用自然语言告诉它题目、附件路径、目标和限制
-- 让它调用你配置好的工具、MCP、Skills、攻略去分析和尝试
+## 当前能跑通的解题链路
 
-这一阶段的目标不是“全自动”，而是验证交互式工作流是否成立。
+一条完整的单题流程通常是：
 
-重点验证三件事：
+1. 初始化 challenge workspace
+2. 让 `Claude Code` 读取题面、附件和限制
+3. 先调用 `ctf-solver-profile` 约束解题姿势
+4. 根据证据切换到具体题型 `Skill`
+5. 调用本地工具、脚本、靶场完成验证
+6. 记录工件、结论和失败路径
+7. 解完后沉淀到 `knowledge/`
 
-1. Claude Code 能不能理解你的 CTF 工作流
-2. 你提供的工具和攻略，能不能被它顺畅调用
-3. 哪些能力适合做成 `MCP`，哪些适合做成 `Skills`
+这条链路已经对应到仓库里的现有资产：
 
-## 为什么先做这一阶段
+- `scripts/init_challenge.py`
+- `scripts/show_challenge.py`
+- `scripts/query_markdown.py`
+- `.claude/skills/ctf-solver-profile/`
+- `.claude/skills/challenge-workspace-bootstrap/`
+- `.claude/skills/web-ssrf-to-rce-triage/`
+- `.claude/skills/web-sqli-triage/`
+- `.claude/skills/ctf-knowledge-capture/`
+- `knowledge/writeups/`
+- `knowledge/patterns/`
+- `targets/`
 
-原因很简单：
+## 输入是什么
 
-- 成本最低
-- 反馈最快
-- 不需要先写 orchestration
-- 能最快暴露“工具设计不好”还是“攻略结构不好”
+当前工作流的输入很简单：
 
-如果这一阶段都跑不顺，直接上 Python 自动化只会更乱。
+- 题目描述
+- 附件路径
+- 目标 URL、端口或连接方式
+- 题目限制条件
 
-## Claude 在这一阶段的定位
-
-不要把 Claude 当“内置所有 CTF 技术细节的模型”。
-
-更合理的定位是：
-
-- Claude 负责：推理、规划、调度、总结
-- 你负责：提供工具、攻略、约束、安全边界
-
-这些能力应拆成三类接入物：
-
-- `Tools`：执行命令、跑脚本、调用现成 CTF 工具、访问题目环境
-- `Skills`：攻略、SOP、解题套路、题型识别和决策规则
-- `Hooks / Permissions / Sandbox`：约束它怎么用工具，避免乱跑和越权
-
-## 这一阶段你能直接怎么用
-
-你可以直接启动 `Claude Code`，然后自然语言下达任务，例如：
-
-- 这是一个 web 题，附件在某个目录，先做初筛
-- 这是一个 ELF，先判断是 pwn 还是 reverse
-- 这是一个题目附件目录，请按我的 playbook 先整理环境
-
-只要你提前把下面这些东西配好，它就可以直接帮你做：
-
-- `.claude/skills/` 里的题型 SOP
-- `.mcp.json` 里的 MCP 工具
-- 本地可执行的 CTF 工具
-- `CLAUDE.md` 里的项目约束和行为规则
-
-## 这一阶段适合接入什么
-
-优先做：
-
-- `Skills`
-- `MCP`
-- 少量项目级配置
-- challenge workspace 目录约定
-
-先不要急着做：
-
-- Python orchestration
-- 任务队列
-- 自动批量跑题
-- 自动 flag 提交系统
-- 复杂状态机
-
-## 推荐的最小目录结构
+为了让输入稳定，建议统一整理到 `workspaces/<challenge-id>/` 下：
 
 ```text
-ctfagent/
-├── .claude/
-│   ├── skills/
-│   │   ├── pwn-initial-recon/
-│   │   │   └── SKILL.md
-│   │   ├── web-sqli-triage/
-│   │   │   └── SKILL.md
-│   │   └── crypto-encoding-decision-tree/
-│   │       └── SKILL.md
-│   ├── CLAUDE.md
-│   └── settings.json
-├── knowledge/
-│   ├── writeups/
-│   ├── playbooks/
-│   └── templates/
-├── workspaces/
-│   └── <challenge-id>/
-├── docs/
-│   └── phase1-claude-code-ctf-workflow.md
-└── .mcp.json
+workspaces/
+└── <challenge-id>/
+    ├── challenge.md
+    ├── metadata.json
+    ├── attachments/
+    ├── notes.md
+    └── artifacts/
 ```
 
-## Skills 应该放什么
+其中：
 
-很适合沉淀为 Skills 的内容：
+- `challenge.md` 负责给 `Claude Code` 直接阅读
+- `metadata.json` 负责结构化字段
+- `notes.md` 负责 challenge 级过程记录
+- `artifacts/` 负责保存脚本、导出文件和中间产物
 
-- Web 常见渗透 checklist
-- Pwn 初始分析 SOP
-- Reverse 定位字符串/控制流/加解密套路
-- Crypto 题型识别树
-- Forensics 文件恢复流程
-- Misc 编解码和隐写排查顺序
+## Claude 在这条工作流里的职责
 
-Skill 里应该写：
+`Claude Code` 不是“替你记住所有 CTF 技巧的黑盒”。
 
-- 什么时候该调用
-- 调用后先做哪几步
-- 哪些结果意味着切换方向
-- 哪些工具优先
+更合理的职责分工是：
 
-## MCP 应该先接什么
+- `Claude Code` 负责推理、规划、调度、总结
+- `Skills` 负责提供题型 SOP 和切换规则
+- `scripts/` 与后续 `MCP` 负责提供能力接口
+- `knowledge/` 负责提供可检索历史经验
+- 你负责定义边界、工具、权限和回归方式
 
-建议先接 1 到 2 个最关键的能力，不要一开始接太多。
+## 当前推荐使用方式
 
-适合最早接入 MCP 的工具：
+### 1. 先整理 challenge
 
-- 比赛平台 API
-- 题目下载/启动
-- 常用扫描器封装
-- 提交 flag 接口
+把题目标准化到 workspace。
 
-适合放进 MCP 的典型工具：
+这样做的价值是：
 
-- `nmap`、`ffuf`、`sqlmap`、`gobuster`、`dirsearch`
-- `pwntools` 脚本执行器
-- `gdb` / `gef` / `pwndbg` 包装器
-- `angr`、`z3`、`binwalk`、`foremost`、`exiftool`
-- `ghidra` / `IDA` / `rizin` / `radare2` 的批处理接口
+- 题面入口固定
+- 附件路径固定
+- 工件位置固定
+- 后续沉淀更容易
 
-## 攻略接入策略
+### 2. 先走 solver posture，再走题型 skill
 
-不要把“任务、攻略、经验”都塞进同一个 prompt。
+不要一开始就让模型直接生成长 payload 或盲目爆破。
 
-建议拆分：
+推荐顺序是：
 
-### 1. Skills 放“短而硬”的套路
+1. `challenge-workspace-bootstrap`
+2. `ctf-solver-profile`
+3. 一个具体题型 `Skill`
+4. `ctf-knowledge-capture`
 
-例如：
+### 3. 优先做低成本验证
 
-- `web-sqli-triage`
-- `web-ssti-triage`
-- `pwn-initial-recon`
-- `rev-unpack-and-trace`
-- `crypto-encoding-decision-tree`
+当前工作流强调：
 
-### 2. 知识库放“长文和案例”
+- 先读源码和元信息
+- 先做短探针验证
+- 先找证据，再升级攻击链
+- 先记录失败路径，再切方向
 
-例如：
+### 4. 用知识库回查历史模式
 
-- 历年 writeup
-- 某类漏洞总结
-- 工具长教程
-- 你自己的复盘笔记
+如果发现题型与历史 writeup 或 pattern 相似，应优先回查 `knowledge/`，而不是每次从零开始。
 
-通过检索或按需读取使用，而不是完整注入 prompt。
+### 5. 解完后立刻沉淀
 
-## 安全边界
+解题结束不是流程终点。
 
-这一阶段虽然不是全自动，但仍然要做边界控制。
+应把以下内容沉淀回仓库：
 
-至少做到：
+- 关键观察
+- 触发条件
+- 成功路径
+- 失败路径
+- 可复用 pattern
 
-- 每个 challenge 一个独立工作目录
-- 敏感凭据不进 agent 工作区
-- 高危工具尽量放进容器或受限运行时
-- 出网做 allowlist
-- 比赛平台 token 通过代理或单独提交工具处理
+## 当前最适合接入什么
 
-不要让 Claude 直接在宿主机裸跑高权限 bash。
+优先建设：
 
-## 阶段 1 MVP
+- `Skills`
+- 查询和整理类脚本
+- 本地靶场
+- 知识沉淀
+- 少量高频工具封装
 
-只支持：
+当前不应优先建设：
 
-- 手动给题目描述
-- 手动给附件路径
-- 手动在 Claude Code 中下指令
-- 本地保存分析过程和工件
+- Python orchestration
+- 复杂任务编排
+- 自动批量跑题
+- 复杂状态机
+- 大而全的比赛平台集成
 
-目标：
+## 当前工作流的效果
 
-- Claude Code 能自己整理附件
-- 会调用知识和工具
-- 能产出中间分析结论
-- 你能发现哪些动作值得固化成结构化工具
+这条工作流的核心效果不是“自动化程度高”，而是“单题分析质量和复用性更高”。
 
-## 推荐的首版决策
+它带来的直接收益包括：
 
-如果现在就开工，我建议先这样定：
+- 新题进入统一工作目录
+- 题型思路可以复用
+- 工具使用方式更稳定
+- 解题经验可搜索、可追溯
+- 已有结论可以在靶场回归验证
 
-- 直接用 `Claude Code`
-- 首批能力：3 到 5 个核心 Skills + 1 到 2 个 MCP 工具
-- 工作模式：单 challenge 单 workspace
-- 目标题型：先只做 Web 或 Reverse
-- 隔离：Docker 容器内执行高风险命令
-- 权限：默认保守，不在宿主机上放开危险执行
+## 当前边界
 
-## 现在就做的事情
+当前工作流默认只解决这些问题：
 
-1. 选定首个题型，只做一个
-2. 先列出你已有工具和攻略
-3. 把它们归类成 `tool / skill / knowledge`
-4. 配置 `.claude/skills/`、`.mcp.json`、`CLAUDE.md`
-5. 直接启动 Claude Code 和它聊天打题
+- 单题分析
+- 人在回路中的工具调用
+- 本地知识回查
+- 工件与结论沉淀
 
-## 这一阶段完成的标志
+它暂时不默认解决：
 
-下面几件事成立，就说明第一阶段跑顺了：
+- 批量题目调度
+- 自动 flag 提交
+- 统一状态总线
+- 多 agent 编排
+
+如果未来这些问题变成真实瓶颈，再进入下一阶段即可。
+
+## 当前工作流已经跑顺的标志
+
+下面几件事成立，就说明第一阶段已经具备稳定价值：
 
 1. Claude Code 能独立完成单题多步分析
 2. 它会稳定调用你的工具和攻略
 3. 你能明确看出高频重复动作
 4. 你已经知道哪些能力下一步要程序化
-
