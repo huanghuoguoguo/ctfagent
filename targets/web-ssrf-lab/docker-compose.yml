@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  web:
+    build: ./web
+    ports:
+      - "5000:5000"
+    networks:
+      - lab_net
+    restart: always
+
+  internal:
+    build: ./internal
+    networks:
+      - lab_net
+    restart: always
+
+networks:
+  lab_net:
+    driver: bridge
