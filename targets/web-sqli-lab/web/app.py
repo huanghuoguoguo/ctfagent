@@ -23,19 +23,19 @@ def init_db():
         
         # Create secret table with flag
         cursor.execute('''
-            CREATE TABLE secret_table_xyz (
+            CREATE TABLE flag_storage_prv (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                flag_val TEXT NOT NULL
+                flag_data TEXT NOT NULL
             )
         ''')
-        cursor.execute("INSERT INTO secret_table_xyz (flag_val) VALUES ('CTF{sqlite_injection_is_neat_2026}')")
+        cursor.execute("INSERT INTO flag_storage_prv (flag_data) VALUES ('CTF{blind_sql_injection_is_the_real_deal}')")
         
         conn.commit()
         conn.close()
 
 @app.route('/')
 def home():
-    return '<h1>SQLite Injection Search API</h1><p>Search users with <code>/search?id=1</code></p>'
+    return '<h1>Secure SQLite Search API</h1><p>Search users with <code>/search?id=1</code></p>'
 
 @app.route('/search')
 def search():
@@ -50,9 +50,13 @@ def search():
     query = f"SELECT id, username, email FROM users WHERE id = {user_id}"
     
     try:
+        # We simulate a "blind" environment where errors are swallowed or generalized
         cursor.execute(query)
         results = cursor.fetchall()
         
+        if not results:
+            return jsonify({"status": "no results found"}), 404
+
         users = []
         for row in results:
             users.append({
@@ -62,8 +66,9 @@ def search():
             })
         
         return jsonify(users)
-    except Exception as e:
-        return str(e), 500
+    except Exception:
+        # Blind SQLi: Generic error instead of revealing database schema
+        return jsonify({"status": "error in query processing"}), 500
     finally:
         conn.close()
 

@@ -11,6 +11,7 @@
 文档：
 
 - [phase1-claude-code-ctf-workflow.md](/home/yhh/ctfagent/docs/phase1-claude-code-ctf-workflow.md)
+- [phase1-cc-first-development-strategy.md](/home/yhh/ctfagent/docs/phase1-cc-first-development-strategy.md)
 
 适用目标：
 
@@ -47,6 +48,7 @@
 ## 相关资料
 
 - 官方摘要：[`agent-sdk-official-notes.md`](/home/yhh/ctfagent/docs/agent-sdk-official-notes.md)
+- challenge 结构与平台边界：[`challenge-package-and-platform-interface.md`](/home/yhh/ctfagent/docs/challenge-package-and-platform-interface.md)
 
 ## 命名约定
 
@@ -56,4 +58,3 @@
 - `Claude Agent SDK`
 
 不再把现行方案写成 `Claude Code SDK`。
-

@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  front:
+    build: ./front
+    ports:
+      - "5003:5003"
+    networks:
+      - isolation_net
+    restart: always
+
+  internal_api:
+    build: ./back
+    networks:
+      - isolation_net
+    restart: always
+
+networks:
+  isolation_net:
+    driver: bridge
