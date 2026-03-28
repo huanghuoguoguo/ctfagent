@@ -1,0 +1,4 @@
+interface:
+  display_name: "CTF Solver Profile"
+  short_description: "Expert CTF reasoning and workflow profile"
+  default_prompt: "Use $ctf-solver-profile before solving a CTF challenge so analysis follows an evidence-first expert workflow and switches cleanly between reconnaissance, exploitation, and note capture."
