@@ -63,15 +63,16 @@ Current implemented Skills:
 3. `web-ssrf-to-rce-triage/` - Web SSRF, local file read, source disclosure, and localhost pivot workflow
 4. `web-sqli-triage/` - Web SQL injection triage with boolean oracle validation and SQLite blind extraction helpers
 5. `web-deserialization-triage/` - Java/Python/PHP deserialization detection and exploitation (ysoserial, pickle, phar)
-6. `ctf-knowledge-capture/` - Save solved cases and reusable patterns into organized Markdown notes
-7. `network-search-ddg/` - DuckDuckGo web search when built-in WebSearch is unavailable (CTF research, CVE lookup, tool docs)
-8. `browser-automation-playwright/` - Headless browser control for XSS validation, DOM extraction, screenshot capture, cookie/session manipulation, and multi-step automation
+6. `pwn-initial-recon/` - Binary analysis: checksec, libc version, vulnerability detection, exploitation strategy
+7. `ctf-knowledge-capture/` - Save solved cases and reusable patterns into organized Markdown notes
+8. `network-search-ddg/` - DuckDuckGo web search when built-in WebSearch is unavailable (CTF research, CVE lookup, tool docs)
+9. `browser-automation-playwright/` - Headless browser control for XSS validation, DOM extraction, screenshot capture, cookie/session manipulation, and multi-step automation
 
 Recommended invocation order:
 
 1. `challenge-workspace-bootstrap` when a challenge is not yet normalized into `workspaces/<challenge-id>/`
 2. `ctf-solver-profile`
-3. one category skill such as `web-ssrf-to-rce-triage`, `web-sqli-triage`, or `web-deserialization-triage`
+3. one category skill such as `web-ssrf-to-rce-triage`, `web-sqli-triage`, `web-deserialization-triage`, or `pwn-initial-recon`
 4. `browser-automation-playwright` when XSS, DOM-based challenges, or JavaScript execution is needed
 5. `network-search-ddg` for external research when WebSearch is unavailable
 6. `ctf-knowledge-capture` after solving or when consolidating findings

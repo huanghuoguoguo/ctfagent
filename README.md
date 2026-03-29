@@ -99,7 +99,7 @@ docker compose up -d
 
 ## 当前 Skills
 
-当前已实现 **8 个核心 skill**，位于 [.claude/skills/](/home/yhh/ctfagent/.claude/skills)：
+当前已实现 **9 个核心 skill**，位于 [.claude/skills/](/home/yhh/ctfagent/.claude/skills)：
 
 ### `challenge-workspace-bootstrap`
 
@@ -143,6 +143,16 @@ docker compose up -d
 - 自动识别序列化格式（Java `rO0AB`, Python `gASV`, PHP `O:8:`）
 - 支持 ysoserial、pickle、phar 等 gadget chain
 - 从格式检测推进到 RCE payload 生成
+
+### `pwn-initial-recon`
+
+作用：
+
+- ELF 二进制分析起手式
+- 自动检测保护机制（NX、Canary、PIE、RELRO）
+- libc 版本识别和符号分析
+- 检测危险函数（gets、strcpy、printf 等）
+- 输出推荐利用策略（ret2system、ROP、one_gadget 等）
 
 ### `browser-automation-playwright`
 
