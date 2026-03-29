@@ -71,6 +71,7 @@ class ReconResult:
     libc: Optional[LibcInfo]
     vulnerabilities: List[Vulnerability]
     interesting_strings: List[str]
+    symbols: Dict[str, int]
     strategy: str
 
 
@@ -104,6 +105,7 @@ class PwnChecker:
         libc_info = self._analyze_libc() if self.libc_path else None
         vulnerabilities = self._find_vulnerabilities()
         strings = self._find_interesting_strings()
+        symbols = self._find_binary_symbols()
         strategy = self._determine_strategy(file_info, protections, vulnerabilities)
 
         self.result = ReconResult(
@@ -112,6 +114,7 @@ class PwnChecker:
             libc=libc_info,
             vulnerabilities=vulnerabilities,
             interesting_strings=strings,
+            symbols=symbols,
             strategy=strategy
         )
         return self.result
@@ -444,6 +447,75 @@ class PwnChecker:
 
         return list(set(interesting))[:10]  # Top 10 unique
 
+    def _find_binary_symbols(self) -> Dict[str, int]:
+        """Collect the most useful local, PLT, and GOT symbols for exploit scaffolding."""
+        symbols: Dict[str, int] = {}
+        wanted_names = {
+            'main',
+            'vuln',
+            'win',
+            'backdoor',
+            'get_shell',
+            'print_flag',
+            'pop_rdi_ret',
+            'useful_gadget',
+            'puts',
+            'printf',
+            'read',
+            'write',
+            'gets',
+        }
+
+        try:
+            nm_output = subprocess.run(
+                ['nm', '-C', self.file_path],
+                capture_output=True,
+                text=True
+            ).stdout
+            for line in nm_output.splitlines():
+                parts = line.split()
+                if len(parts) < 3:
+                    continue
+                if not re.fullmatch(r'[0-9a-fA-F]+', parts[0]):
+                    continue
+                name = parts[2]
+                if name in wanted_names:
+                    symbols[name] = int(parts[0], 16)
+        except Exception:
+            pass
+
+        try:
+            objdump_plt = subprocess.run(
+                ['objdump', '-d', self.file_path],
+                capture_output=True,
+                text=True
+            ).stdout
+            for line in objdump_plt.splitlines():
+                match = re.match(r'^\s*([0-9a-fA-F]+)\s+<([^>]+@plt)>:', line)
+                if match:
+                    symbols[match.group(2)] = int(match.group(1), 16)
+        except Exception:
+            pass
+
+        try:
+            objdump_got = subprocess.run(
+                ['objdump', '-R', self.file_path],
+                capture_output=True,
+                text=True
+            ).stdout
+            for line in objdump_got.splitlines():
+                match = re.search(r'^([0-9a-fA-F]+)\s+R_\S+\s+(.+)$', line.strip())
+                if not match:
+                    continue
+                name = match.group(2).strip()
+                if not name.endswith('@got'):
+                    name = f'{name}@got'
+                symbols[name] = int(match.group(1), 16)
+        except Exception:
+            pass
+
+        return dict(sorted(symbols.items()))
+
     def _determine_strategy(self, file_info: FileInfo,
                            protections: Protections,
                            vulnerabilities: List[Vulnerability]) -> str:
@@ -533,6 +605,11 @@ class PwnChecker:
             print("\n[INTERESTING STRINGS]")
             for s in r.interesting_strings[:5]:
                 print(f"  - {s}")
+
+        if r.symbols:
+            print("\n[SYMBOLS]")
+            for name, addr in list(r.symbols.items())[:8]:
+                print(f"  {name}: {hex(addr)}")
 
         print("\n[RECOMMENDED STRATEGY]")
         print(f"  → {r.strategy}")
