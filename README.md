@@ -99,7 +99,7 @@ docker compose up -d
 
 ## 当前 Skills
 
-当前已实现 **7 个核心 skill**，位于 [.claude/skills/](/home/yhh/ctfagent/.claude/skills)：
+当前已实现 **8 个核心 skill**，位于 [.claude/skills/](/home/yhh/ctfagent/.claude/skills)：
 
 ### `challenge-workspace-bootstrap`
 
@@ -134,6 +134,15 @@ docker compose up -d
 - 稳定 true/false oracle
 - 优先支持 boolean-blind SQLite 风格提取
 - 从确认注入推进到最小必要的 schema / flag 抽取
+
+### `web-deserialization-triage`
+
+作用：
+
+- Java/Python/PHP 反序列化漏洞检测
+- 自动识别序列化格式（Java `rO0AB`, Python `gASV`, PHP `O:8:`）
+- 支持 ysoserial、pickle、phar 等 gadget chain
+- 从格式检测推进到 RCE payload 生成
 
 ### `browser-automation-playwright`
 
