@@ -63,24 +63,28 @@ Current implemented Skills:
 3. `web-ssrf-to-rce-triage/` - Web SSRF, local file read, source disclosure, and localhost pivot workflow
 4. `web-sqli-triage/` - Web SQL injection triage with boolean oracle validation and SQLite blind extraction helpers
 5. `ctf-knowledge-capture/` - Save solved cases and reusable patterns into organized Markdown notes
+6. `network-search-ddg/` - DuckDuckGo web search when built-in WebSearch is unavailable (CTF research, CVE lookup, tool docs)
+7. `browser-automation-playwright/` - Headless browser control for XSS validation, DOM extraction, screenshot capture, cookie/session manipulation, and multi-step automation
 
 Recommended invocation order:
 
 1. `challenge-workspace-bootstrap` when a challenge is not yet normalized into `workspaces/<challenge-id>/`
 2. `ctf-solver-profile`
 3. one category skill such as `web-ssrf-to-rce-triage` or `web-sqli-triage`
-4. `ctf-knowledge-capture` after solving or when consolidating findings
+4. `browser-automation-playwright` when XSS, DOM-based challenges, or JavaScript execution is needed
+5. `network-search-ddg` for external research when WebSearch is unavailable
+6. `ctf-knowledge-capture` after solving or when consolidating findings
 
 ## Skill Categories to Create Next
 
 After the current baseline, prioritize these additional Skills:
 
 1. `pwn-initial-recon/` - Binary analysis SOP
-2. `web-sqli-triage/` - SQL injection detection
-3. `web-ssti-triage/` - SSTI detection
-4. `crypto-encoding-decision-tree/` - Crypto identification
-5. `rev-unpack-and-trace/` - Reverse engineering workflow
-6. `web-backdoor-triage/` - Blank-page PHP backdoors, short-parameter `assert/eval/system` checks
+2. `web-ssti-triage/` - SSTI detection
+3. `crypto-encoding-decision-tree/` - Crypto identification
+4. `rev-unpack-and-trace/` - Reverse engineering workflow
+5. `web-backdoor-triage/` - Blank-page PHP backdoors, short-parameter `assert/eval/system` checks
+6. `web-deserialization-triage/` - Java/Python/PHP deserialization detection and exploitation
 
 ## MCP Tools to Integrate
 
@@ -139,6 +143,8 @@ If later automation becomes necessary, prioritize these custom tools:
 - Solver profile: `.claude/skills/ctf-solver-profile/SKILL.md`
 - Workspace bootstrap: `.claude/skills/challenge-workspace-bootstrap/SKILL.md`
 - Knowledge capture: `.claude/skills/ctf-knowledge-capture/SKILL.md`
+- Network search (DuckDuckGo): `.claude/skills/network-search-ddg/SKILL.md`
+- Browser automation (Playwright): `.claude/skills/browser-automation-playwright/SKILL.md`
 
 ## Environment Configuration
 
