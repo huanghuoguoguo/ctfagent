@@ -56,7 +56,7 @@ Create a new writeup scaffold:
 
 ```bash
 python3 .claude/skills/ctf-knowledge-capture/scripts/new_note.py \
-  --root /home/yhh/ctfagent \
+  --root . \
   --kind writeup \
   --category web \
   --slug internal-resource-viewer \
@@ -67,7 +67,7 @@ Create a new reusable pattern scaffold:
 
 ```bash
 python3 .claude/skills/ctf-knowledge-capture/scripts/new_note.py \
-  --root /home/yhh/ctfagent \
+  --root . \
   --kind pattern \
   --category web \
   --slug ssrf-to-lfi-to-localhost-rce \

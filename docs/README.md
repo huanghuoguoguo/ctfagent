@@ -1,34 +1,26 @@
-# CTFAgent 文档总览
+# CTFAgent Docs
 
-更新时间：2026-03-28
+更新时间：2026-03-29
 
-`docs/` 的目标不是堆路线稿，而是清楚回答四件事：
+先看根目录 [README.md](../README.md)。
 
-1. 我们现在能做什么
-2. 现在是怎么设计的
-3. 为什么这样设计
-4. 这样做带来了什么效果
+这轮文档整理只服务三个目标：
 
-当前主线已经明确：
+- 便于维护
+- 便于理解和查看
+- 便于 agent 解题
 
-- 现在以 `Claude Code` 为核心解题
-- 优先沉淀 `Skills`、薄工具、知识库和回归靶场
-- 文档只保留当前主线真正需要的部分
+`docs/` 只放仓库内部信息。每个文件只回答一个问题：
 
-## 建议阅读顺序
+- [overview.md](overview.md)
+  - 这个仓库是什么，不是什么，核心资产有哪些
+- [workflow.md](workflow.md)
+  - 用户把一道题交给仓库后，标准流程怎么走
+- [workspace.md](workspace.md)
+  - `workspaces/<challenge-id>/` 的结构和边界是什么
+- [skills.md](skills.md)
+  - 当前 skill 系统怎么分层，新 skill 的质量门槛是什么
+- [roadmap.md](roadmap.md)
+  - 近期还缺哪些能力，优先级怎么排
 
-1. [`claude-agent-sdk-ctf-agent-design.md`](/home/yhh/ctfagent/docs/claude-agent-sdk-ctf-agent-design.md)
-   - 一页看懂项目现在能做什么、怎么设计、为什么这样做、带来了什么效果
-2. [`phase1-claude-code-ctf-workflow.md`](/home/yhh/ctfagent/docs/phase1-claude-code-ctf-workflow.md)
-   - 当前工作流：如何用 `Claude Code` 打题、产出什么结果
-3. [`challenge-package-and-platform-interface.md`](/home/yhh/ctfagent/docs/challenge-package-and-platform-interface.md)
-   - challenge workspace、平台接口、`Skill/MCP/knowledge` 的边界
-4. [`skills-roadmap.md`](/home/yhh/ctfagent/docs/skills-roadmap.md)
-   - 下一阶段该优先补哪些 skill、哪些基础能力，以及新 skill 的质量门槛
-
-## 这套文档的定位
-
-- 总览文档讲当前主线，不和未来路线混写
-- 工作流文档讲怎么用
-- 设计文档讲为什么这样做以及产生了什么效果
-- 边界文档讲结构和职责划分
+如果一个信息已经写进某个文件，就不要在别的文件重复解释。

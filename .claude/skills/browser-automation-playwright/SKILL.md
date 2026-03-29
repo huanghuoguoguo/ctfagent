@@ -64,11 +64,12 @@ playwright install  # Install all browsers (Chrome, Firefox, WebKit)
 如果要安装 Chromium 的系统依赖，推荐：
 
 ```bash
-which playwright
-sudo /home/yhh/.local/bin/playwright install-deps chromium
+PLAYWRIGHT_BIN="$(command -v playwright)"
+echo "$PLAYWRIGHT_BIN"
+sudo "$PLAYWRIGHT_BIN" install-deps chromium
 ```
 
-有些环境里 `sudo` 不会继承用户 PATH，这时不要写 `sudo playwright ...`，直接用完整路径。
+有些环境里 `sudo` 不会继承用户 PATH，这时不要写 `sudo playwright ...`，先解析出可执行文件路径再调用。
 
 如果不想依赖 `playwright install-deps`，可以手动安装：
 

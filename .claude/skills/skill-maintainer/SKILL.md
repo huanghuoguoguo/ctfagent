@@ -46,7 +46,7 @@ Check inventory drift and duplicate roadmap entries:
 
 ```bash
 python3 .claude/skills/skill-maintainer/scripts/check_skill_inventory.py \
-  --root /home/yhh/ctfagent
+  --root .
 ```
 
 Record unresolved work in:

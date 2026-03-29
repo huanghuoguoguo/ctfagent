@@ -1,92 +1,59 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Repository guidance for `Claude Code`.
 
-## Project Overview
+## Project
 
-**CTFAgent** is a CTF (Capture The Flag) workspace centered on Claude Code. The current focus is interactive solving, reusable skills, local tooling, knowledge capture, and regression targets.
+`CTFAgent` is a `Claude Code`-first CTF workspace.
 
-## Naming Conventions
+Default user path:
 
-Use these exact terms in all documentation and code:
+1. configure `Claude Code`
+2. run `/setup`
+3. provide challenge info
+4. let the repo create or inspect a workspace
 
-- `Claude Code` - The CLI tool
-- `Claude Agent SDK` - The Python/TypeScript SDK (formerly Claude Code SDK)
-- `Skills` - CTF playbooks stored in `.claude/skills/`
-- `MCP` - Model Context Protocol tools
+Do not force users to learn internal scripts before they can start.
 
-## Project Structure
+## Working Defaults
 
-```
-ctfagent/
-├── docs/                   # Architecture documentation
-│   ├── README.md                               # Docs entry point
-│   ├── claude-agent-sdk-ctf-agent-design.md    # Current design overview
-│   ├── phase1-claude-code-ctf-workflow.md      # Current workflow
-│   └── challenge-package-and-platform-interface.md # Workspace and boundary rules
-├── .claude/
-│   ├── skills/            # Active CTF skills/playbooks
-│   └── settings.local.json # Local settings with env vars and permissions
-├── knowledge/             # Local writeups and reusable exploit patterns
-├── workspaces/            # Challenge workspaces
-└── .mcp.json             # MCP server configuration (future)
-```
-
-## Current Development Mode
-
-Currently centered on Claude Code: solve challenges interactively, harden the workflow, and accumulate reusable skills and knowledge before adding more system complexity.
-
-Key aspects:
-- Each challenge gets an isolated workspace under `workspaces/<challenge-id>/`
-- Skills for CTF categories go in `.claude/skills/<skill-name>/SKILL.md`
-- Tools and MCP servers provide CTF capabilities
-- Security: Challenge execution should be sandboxed; credentials isolated
-
-## Current Working Method
-
-The repository now has a concrete Phase 1 solving loop:
-
-1. Start with `ctf-solver-profile`
-2. Invoke one concrete category skill after evidence supports the category
-3. Solve and preserve key artifacts during the process
-4. Save the result with `ctf-knowledge-capture`
-5. Promote repeated exploit chains into `knowledge/patterns/`
-
-Do not start with long exploit payloads or broad guessing. Default to short validating probes and source/metadata acquisition first.
+- Prefer evidence-first analysis over brute force.
+- Start with short validating probes and source/metadata reads.
+- Use `workspaces/<challenge-id>/` for challenge-local context and artifacts.
+- Keep reusable knowledge in `knowledge/`, not only in chat history.
+- Treat platform integration as optional. It is only needed for pull/download/spawn/submit workflows.
 
 ## Active Skills
 
 Current implemented Skills:
 
-1. `ctf-solver-profile/` - Front-door solver posture, evidence-first reasoning, category switching rules
-2. `challenge-workspace-bootstrap/` - Normalize a new challenge into `workspaces/<challenge-id>/` before solving
-3. `web-ssrf-to-rce-triage/` - Web SSRF, local file read, source disclosure, and localhost pivot workflow
-4. `web-sqli-triage/` - Web SQL injection triage with boolean oracle validation and SQLite blind extraction helpers
-5. `web-deserialization-triage/` - Java/Python/PHP deserialization detection and exploitation (ysoserial, pickle, phar)
-6. `web-ssti-triage/` - Server-side template injection triage with probe ordering, engine fingerprinting, and low-risk object reads before escalation
-7. `web-jwt-triage/` - JWT inspection, `alg=none` crafting, weak HS256 re-signing, and weak-secret probing
-8. `web-xss-triage/` - Reflected and DOM XSS triage with context classification and browser-backed execution checks
-9. `pwn-initial-recon/` - Binary analysis: checksec, libc version, vulnerability detection, exploitation strategy
-10. `pwn-stack-overflow-exploit-dev/` - Exploit scaffolding for ret2win, ret2libc, and generic stack-overflow starts after recon
-11. `ctf-knowledge-capture/` - Save solved cases and reusable patterns into organized Markdown notes
-12. `skill-maintainer/` - Turn solve feedback into the smallest safe repo upgrade while preferring consolidation over new skill sprawl
-13. `network-search-ddg/` - DuckDuckGo web search when built-in WebSearch is unavailable (CTF research, CVE lookup, tool docs)
-14. `browser-automation-playwright/` - Headless browser control for XSS validation, DOM extraction, screenshot capture, cookie/session manipulation, and multi-step automation
+1. `setup/` - User-facing onboarding and workspace setup
+2. `ctf-solver-profile/` - Evidence-first solver posture and category switching
+3. `challenge-workspace-bootstrap/` - Normalize a challenge into `workspaces/<challenge-id>/`
+4. `web-ssrf-to-rce-triage/` - SSRF, file-read, localhost pivot, and RCE workflow
+5. `web-sqli-triage/` - Web SQLi validation and SQLite blind extraction helpers
+6. `web-deserialization-triage/` - Java/Python/PHP deserialization detection and exploitation
+7. `web-ssti-triage/` - SSTI probe ordering, engine fingerprinting, and escalation
+8. `web-jwt-triage/` - JWT inspection, `alg=none`, weak-secret, and signing issues
+9. `web-xss-triage/` - Reflected and DOM XSS triage with browser-backed validation
+10. `pwn-initial-recon/` - Binary protections, libc, dangerous functions, and exploit direction
+11. `pwn-stack-overflow-exploit-dev/` - Ret2win, ret2libc, and stack-overflow exploit scaffolding
+12. `ctf-knowledge-capture/` - Save solved cases and reusable patterns into Markdown notes
+13. `skill-maintainer/` - Turn solve feedback into the smallest safe repo upgrade
+14. `network-search-ddg/` - DuckDuckGo search fallback for external research
+15. `browser-automation-playwright/` - Headless browser control for XSS and DOM workflows
 
 Recommended invocation order:
 
-1. `challenge-workspace-bootstrap` when a challenge is not yet normalized into `workspaces/<challenge-id>/`
-2. `ctf-solver-profile`
-3. one category skill such as `web-ssrf-to-rce-triage`, `web-sqli-triage`, `web-ssti-triage`, `web-jwt-triage`, `web-xss-triage`, `web-deserialization-triage`, or `pwn-initial-recon`
-4. `pwn-stack-overflow-exploit-dev` after `pwn-initial-recon` when a stack overwrite path is confirmed
-5. `browser-automation-playwright` when XSS, DOM-based challenges, or JavaScript execution is needed
-6. `network-search-ddg` for external research when WebSearch is unavailable
-7. `ctf-knowledge-capture` after solving or when consolidating findings
-8. `skill-maintainer` after solving or after a failed repeated pattern when the repo itself needs to learn from the result
+1. `setup`
+2. `challenge-workspace-bootstrap`
+3. `ctf-solver-profile`
+4. one concrete category skill
+5. optional support skills such as `browser-automation-playwright` or `network-search-ddg`
+6. `ctf-knowledge-capture`
+7. `skill-maintainer`
 
 ## Roadmap
-
-Near-term roadmap is in [`docs/skills-roadmap.md`](/home/yhh/ctfagent/docs/skills-roadmap.md). Priority tracks:
 
 1. `skill-quality-bar-and-doc-alignment`
 2. `regression-target-convention`
@@ -97,93 +64,11 @@ Near-term roadmap is in [`docs/skills-roadmap.md`](/home/yhh/ctfagent/docs/skill
 7. `pwn-canary-and-pie-follow-up`
 8. `skill-maintainer`
 
-Default acceptance bar for any new Skill:
+## Docs
 
-- pair it with at least one thin script or fixed command template
-- add or identify a local target/lab or smoke fixture for regression
-- document probe order, switching signals, and exit conditions
-- keep `README.md`, `CLAUDE.md`, and `docs/` aligned with the active skill set
-
-## MCP Tools to Integrate (Future)
-
-Priority CTF tools for MCP wrapping when the skill layer stabilizes:
-
-- `nmap`, `ffuf`, `sqlmap`, `gobuster`, `dirsearch` (Web)
-- `pwntools` execution wrapper (Pwn)
-- `gdb`/`gef`/`pwndbg` wrapper (Pwn)
-- `angr`, `z3` (Reverse/Crypto)
-- `binwalk`, `foremost`, `exiftool` (Forensics)
-- `ghidra`/`rizin`/`radare2` batch interface (Reverse)
-
-Phase 2 focuses on Python script wrappers first. MCP integration comes after skills are stable.
-
-## Security Boundaries
-
-- Each challenge: isolated workspace directory
-- Sensitive credentials: never in agent workspace
-- High-risk tools: container or sandbox execution
-- Network: allowlist egress, challenge environments only
-- Flag submission: via proxy tool, token not exposed to model
-
-## Knowledge Base
-
-Persist solved challenge knowledge under `knowledge/`:
-
-- `knowledge/writeups/<category>/` - One file per concrete challenge
-- `knowledge/patterns/<category>/` - Reusable exploit chains and heuristics
-- `knowledge/index.md` - Table of contents
-
-Current web examples:
-
-- `knowledge/writeups/web/internal-resource-viewer.md`
-- `knowledge/writeups/web/171-80-2-169-18148.md`
-- `knowledge/patterns/web/ssrf-to-lfi-to-localhost-rce.md`
-- `knowledge/patterns/web/obfuscated-assert-get-rce.md`
-
-When a challenge is solved, update the writeup first. Only update a pattern or a Skill when the lesson generalizes.
-
-## Custom Tools (Future)
-
-If later automation becomes necessary, prioritize these custom tools:
-
-1. `init_challenge` - Create workspace, download/extract attachments
-2. `submit_flag` - Submit to platform without exposing token
-3. `query_playbook` - Query knowledge base
-4. `run_solver` - Execute solver in sandbox
-5. `inspect_artifact` - File metadata and hash
-6. `spawn_target` - Start Docker challenge or connect to remote
-
-## Documentation References
-
-- Docs entry: `docs/README.md`
-- Current workflow: `docs/phase1-claude-code-ctf-workflow.md`
-- Current design overview: `docs/claude-agent-sdk-ctf-agent-design.md`
-- Workspace boundary: `docs/challenge-package-and-platform-interface.md`
-- Workspace bootstrap script: `scripts/init_challenge.py`
-- Solver profile: `.claude/skills/ctf-solver-profile/SKILL.md`
-- Workspace bootstrap: `.claude/skills/challenge-workspace-bootstrap/SKILL.md`
-- Web SSTI triage: `.claude/skills/web-ssti-triage/SKILL.md`
-- Web JWT triage: `.claude/skills/web-jwt-triage/SKILL.md`
-- Web XSS triage: `.claude/skills/web-xss-triage/SKILL.md`
-- Pwn exploit scaffolding: `.claude/skills/pwn-stack-overflow-exploit-dev/SKILL.md`
-- Knowledge capture: `.claude/skills/ctf-knowledge-capture/SKILL.md`
-- Skill maintenance: `.claude/skills/skill-maintainer/SKILL.md`
-- Network search (DuckDuckGo): `.claude/skills/network-search-ddg/SKILL.md`
-- Browser automation (Playwright): `.claude/skills/browser-automation-playwright/SKILL.md`
-
-## Environment Configuration
-
-Local settings are in `.claude/settings.local.json` with:
-- Custom Anthropic API endpoint and model
-- Tool permissions configured
-- Bash restrictions for security
-
-## Practical Defaults
-
-When solving in this repo:
-
-- Prefer evidence-rich reads over brute force
-- Use the smallest probe that can confirm a hypothesis
-- Record dead ends, not just successes
-- Treat blank dynamic pages as possible backdoors, not as empty targets
-- Preserve commands, source snippets, and flag paths in `knowledge/`
+- `docs/README.md`
+- `docs/overview.md`
+- `docs/workflow.md`
+- `docs/workspace.md`
+- `docs/skills.md`
+- `docs/roadmap.md`
