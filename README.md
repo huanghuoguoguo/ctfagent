@@ -58,16 +58,19 @@ python3 scripts/show_challenge.py workspaces/internal-resource-viewer
 
 推荐顺序：
 
-1. `challenge-workspace-bootstrap`
-2. `ctf-solver-profile`
-3. 一个具体题型 `Skill`
-4. `ctf-knowledge-capture`
+1. `challenge-workspace-bootstrap` - 初始化题目 workspace
+2. `ctf-solver-profile` - 建立 evidence-first 解题姿势
+3. 一个具体题型 `Skill`（如 `web-ssrf-to-rce-triage`、`web-sqli-triage`）
+4. `browser-automation-playwright` - 需要 XSS 验证、DOM 提取、截图等浏览器操作时
+5. `network-search-ddg` - WebSearch 不可用时查 CVE、工具文档
+6. `ctf-knowledge-capture` - 保存解题结果到知识库
 
 这条顺序的意义是：
 
 - 先固定题目入口
 - 先建立 evidence-first 的解题姿势
 - 再进入具体题型流程
+- 需要时调用浏览器自动化和网络搜索
 - 最后把结果沉淀回知识库
 
 ### 3. 用知识库回查历史经验
@@ -96,7 +99,7 @@ docker compose up -d
 
 ## 当前 Skills
 
-当前已实现 5 个核心 skill，位于 [.claude/skills/](/home/yhh/ctfagent/.claude/skills)：
+当前已实现 **7 个核心 skill**，位于 [.claude/skills/](/home/yhh/ctfagent/.claude/skills)：
 
 ### `challenge-workspace-bootstrap`
 
@@ -131,6 +134,24 @@ docker compose up -d
 - 稳定 true/false oracle
 - 优先支持 boolean-blind SQLite 风格提取
 - 从确认注入推进到最小必要的 schema / flag 抽取
+
+### `browser-automation-playwright`
+
+作用：
+
+- 无头浏览器控制（无需 GUI）
+- XSS payload 验证和 console 捕获
+- DOM 内容提取（JavaScript 渲染后的页面）
+- 截图、Cookie/Session 操作、表单自动化
+- 支持多步骤 action chain
+
+### `network-search-ddg`
+
+作用：
+
+- 当 Claude Code 内置 WebSearch 不可用时备用
+- DuckDuckGo 网络搜索
+- CTF 技术研究、CVE 查询、工具文档查找
 
 ### `ctf-knowledge-capture`
 
