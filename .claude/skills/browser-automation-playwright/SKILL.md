@@ -61,10 +61,42 @@ playwright install chromium  # Only install Chrome
 playwright install  # Install all browsers (Chrome, Firefox, WebKit)
 ```
 
+如果要安装 Chromium 的系统依赖，推荐：
+
+```bash
+which playwright
+sudo /home/yhh/.local/bin/playwright install-deps chromium
+```
+
+有些环境里 `sudo` 不会继承用户 PATH，这时不要写 `sudo playwright ...`，直接用完整路径。
+
+如果不想依赖 `playwright install-deps`，可以手动安装：
+
+```bash
+sudo apt-get update
+sudo apt-get install -y \
+  libgbm1 \
+  libnss3 \
+  libatk-bridge2.0-0 \
+  libatk1.0-0 \
+  libcups2 \
+  libdrm2 \
+  libxcomposite1 \
+  libxdamage1 \
+  libxfixes3 \
+  libxrandr2 \
+  libxkbcommon0 \
+  libpango-1.0-0 \
+  libcairo2 \
+  libatspi2.0-0 \
+  libgtk-3-0
+```
+
 ### Verify Installation
 
 ```bash
 python3 -c "from playwright.sync_api import sync_playwright; print('Playwright OK')"
+python3 .claude/skills/browser-automation-playwright/scripts/browser_ctl.py check
 ```
 
 ## CTF Workflow Patterns

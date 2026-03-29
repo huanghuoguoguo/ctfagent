@@ -63,34 +63,50 @@ Current implemented Skills:
 3. `web-ssrf-to-rce-triage/` - Web SSRF, local file read, source disclosure, and localhost pivot workflow
 4. `web-sqli-triage/` - Web SQL injection triage with boolean oracle validation and SQLite blind extraction helpers
 5. `web-deserialization-triage/` - Java/Python/PHP deserialization detection and exploitation (ysoserial, pickle, phar)
-6. `pwn-initial-recon/` - Binary analysis: checksec, libc version, vulnerability detection, exploitation strategy
-7. `ctf-knowledge-capture/` - Save solved cases and reusable patterns into organized Markdown notes
-8. `network-search-ddg/` - DuckDuckGo web search when built-in WebSearch is unavailable (CTF research, CVE lookup, tool docs)
-9. `browser-automation-playwright/` - Headless browser control for XSS validation, DOM extraction, screenshot capture, cookie/session manipulation, and multi-step automation
+6. `web-ssti-triage/` - Server-side template injection triage with probe ordering, engine fingerprinting, and low-risk object reads before escalation
+7. `web-jwt-triage/` - JWT inspection, `alg=none` crafting, weak HS256 re-signing, and weak-secret probing
+8. `web-xss-triage/` - Reflected and DOM XSS triage with context classification and browser-backed execution checks
+9. `pwn-initial-recon/` - Binary analysis: checksec, libc version, vulnerability detection, exploitation strategy
+10. `pwn-stack-overflow-exploit-dev/` - Exploit scaffolding for ret2win, ret2libc, and generic stack-overflow starts after recon
+11. `ctf-knowledge-capture/` - Save solved cases and reusable patterns into organized Markdown notes
+12. `skill-maintainer/` - Turn solve feedback into the smallest safe repo upgrade while preferring consolidation over new skill sprawl
+13. `network-search-ddg/` - DuckDuckGo web search when built-in WebSearch is unavailable (CTF research, CVE lookup, tool docs)
+14. `browser-automation-playwright/` - Headless browser control for XSS validation, DOM extraction, screenshot capture, cookie/session manipulation, and multi-step automation
 
 Recommended invocation order:
 
 1. `challenge-workspace-bootstrap` when a challenge is not yet normalized into `workspaces/<challenge-id>/`
 2. `ctf-solver-profile`
-3. one category skill such as `web-ssrf-to-rce-triage`, `web-sqli-triage`, `web-deserialization-triage`, or `pwn-initial-recon`
-4. `browser-automation-playwright` when XSS, DOM-based challenges, or JavaScript execution is needed
-5. `network-search-ddg` for external research when WebSearch is unavailable
-6. `ctf-knowledge-capture` after solving or when consolidating findings
+3. one category skill such as `web-ssrf-to-rce-triage`, `web-sqli-triage`, `web-ssti-triage`, `web-jwt-triage`, `web-xss-triage`, `web-deserialization-triage`, or `pwn-initial-recon`
+4. `pwn-stack-overflow-exploit-dev` after `pwn-initial-recon` when a stack overwrite path is confirmed
+5. `browser-automation-playwright` when XSS, DOM-based challenges, or JavaScript execution is needed
+6. `network-search-ddg` for external research when WebSearch is unavailable
+7. `ctf-knowledge-capture` after solving or when consolidating findings
+8. `skill-maintainer` after solving or after a failed repeated pattern when the repo itself needs to learn from the result
 
-## Skill Categories to Create Next
+## Roadmap
 
-After the current baseline, prioritize these additional Skills:
+Near-term roadmap is in [`docs/skills-roadmap.md`](/home/yhh/ctfagent/docs/skills-roadmap.md). Priority tracks:
 
-1. `pwn-initial-recon/` - Binary analysis SOP
-2. `web-ssti-triage/` - SSTI detection
-3. `crypto-encoding-decision-tree/` - Crypto identification
-4. `rev-unpack-and-trace/` - Reverse engineering workflow
-5. `web-backdoor-triage/` - Blank-page PHP backdoors, short-parameter `assert/eval/system` checks
-6. `web-deserialization-triage/` - Java/Python/PHP deserialization detection and exploitation
+1. `skill-quality-bar-and-doc-alignment`
+2. `regression-target-convention`
+3. `rev-unpack-and-trace`
+4. `crypto-encoding-decision-tree`
+5. `web-backdoor-triage`
+6. `artifact-inspection-utility`
+7. `pwn-canary-and-pie-follow-up`
+8. `skill-maintainer`
 
-## MCP Tools to Integrate
+Default acceptance bar for any new Skill:
 
-Priority CTF tools for MCP wrapping:
+- pair it with at least one thin script or fixed command template
+- add or identify a local target/lab or smoke fixture for regression
+- document probe order, switching signals, and exit conditions
+- keep `README.md`, `CLAUDE.md`, and `docs/` aligned with the active skill set
+
+## MCP Tools to Integrate (Future)
+
+Priority CTF tools for MCP wrapping when the skill layer stabilizes:
 
 - `nmap`, `ffuf`, `sqlmap`, `gobuster`, `dirsearch` (Web)
 - `pwntools` execution wrapper (Pwn)
@@ -98,6 +114,8 @@ Priority CTF tools for MCP wrapping:
 - `angr`, `z3` (Reverse/Crypto)
 - `binwalk`, `foremost`, `exiftool` (Forensics)
 - `ghidra`/`rizin`/`radare2` batch interface (Reverse)
+
+Phase 2 focuses on Python script wrappers first. MCP integration comes after skills are stable.
 
 ## Security Boundaries
 
@@ -144,7 +162,12 @@ If later automation becomes necessary, prioritize these custom tools:
 - Workspace bootstrap script: `scripts/init_challenge.py`
 - Solver profile: `.claude/skills/ctf-solver-profile/SKILL.md`
 - Workspace bootstrap: `.claude/skills/challenge-workspace-bootstrap/SKILL.md`
+- Web SSTI triage: `.claude/skills/web-ssti-triage/SKILL.md`
+- Web JWT triage: `.claude/skills/web-jwt-triage/SKILL.md`
+- Web XSS triage: `.claude/skills/web-xss-triage/SKILL.md`
+- Pwn exploit scaffolding: `.claude/skills/pwn-stack-overflow-exploit-dev/SKILL.md`
 - Knowledge capture: `.claude/skills/ctf-knowledge-capture/SKILL.md`
+- Skill maintenance: `.claude/skills/skill-maintainer/SKILL.md`
 - Network search (DuckDuckGo): `.claude/skills/network-search-ddg/SKILL.md`
 - Browser automation (Playwright): `.claude/skills/browser-automation-playwright/SKILL.md`
 

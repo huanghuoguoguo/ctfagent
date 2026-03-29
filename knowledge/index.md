@@ -9,6 +9,7 @@
 - [SSRF IP Bypass to LFI to Pickle RCE Chain](knowledge/writeups/web/ssrf-ip-bypass-to-lfi-pickle-chain.md)
 - [SSRF Proxy to Internal Host](knowledge/writeups/web/ssrf-proxy-to-internal.md)
 - [SQLite Boolean Blind SQL Injection](knowledge/writeups/web/sqlite-blind-sql-injection.md)
+- [Web XSS Lab - Reflected and DOM XSS](knowledge/writeups/web/web-xss-lab.md)
 
 ## Patterns
 

@@ -23,6 +23,8 @@
    - 当前工作流：如何用 `Claude Code` 打题、产出什么结果
 3. [`challenge-package-and-platform-interface.md`](/home/yhh/ctfagent/docs/challenge-package-and-platform-interface.md)
    - challenge workspace、平台接口、`Skill/MCP/knowledge` 的边界
+4. [`skills-roadmap.md`](/home/yhh/ctfagent/docs/skills-roadmap.md)
+   - 下一阶段该优先补哪些 skill、哪些基础能力，以及新 skill 的质量门槛
 
 ## 这套文档的定位
 
