@@ -49,6 +49,7 @@ class SkillGapReportTest(unittest.TestCase):
         )
         self.assertEqual(result["classification"], "new_skill")
         self.assertIn("create web-xss-triage/SKILL.md", result["actions"])
+        self.assertIn("run skill_growth_guard.py before creating the new directory", result["actions"])
 
     def test_one_off_goes_to_backlog(self) -> None:
         result = skill_gap_report.classify_gap(
@@ -58,6 +59,17 @@ class SkillGapReportTest(unittest.TestCase):
             candidate_skill=None,
         )
         self.assertEqual(result["classification"], "backlog_only")
+
+    def test_doc_drift_points_to_real_docs(self) -> None:
+        result = skill_gap_report.classify_gap(
+            {"doc_drift"},
+            frequency=1,
+            existing_skill="skill-maintainer",
+            candidate_skill=None,
+        )
+        self.assertEqual(result["classification"], "update_skill")
+        self.assertIn("sync docs/skills.md", result["actions"])
+        self.assertIn("sync docs/roadmap.md", result["actions"])
 
 
 if __name__ == "__main__":

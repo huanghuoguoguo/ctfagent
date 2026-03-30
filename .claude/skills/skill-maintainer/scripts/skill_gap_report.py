@@ -41,7 +41,7 @@ def classify_gap(
     rationale: list[str] = []
 
     if "doc_drift" in signals:
-        actions.extend(["sync README.md", "sync CLAUDE.md", "sync docs/skills-roadmap.md"])
+        actions.extend(["sync README.md", "sync CLAUDE.md", "sync docs/skills.md", "sync docs/roadmap.md"])
         if existing_skill:
             actions.insert(0, f"update {existing_skill}/SKILL.md if behavior changed")
         rationale.append("Documentation drift is a maintenance failure, not a reason for a new skill.")
@@ -126,7 +126,8 @@ def classify_gap(
         actions.append("add at least one thin script")
         actions.append("add at least one minimal local lab or fixture")
         actions.append("add at least one lightweight test")
-        actions.append("sync README.md, CLAUDE.md, and docs/skills-roadmap.md")
+        actions.append("run skill_growth_guard.py before creating the new directory")
+        actions.append("sync README.md, CLAUDE.md, docs/skills.md, and docs/roadmap.md")
         rationale.append("The pattern is repeated and no existing skill owns it cleanly.")
         return {
             "classification": "new_skill",

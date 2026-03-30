@@ -39,7 +39,7 @@ Current implemented Skills:
 10. `pwn-initial-recon/` - Binary protections, libc, dangerous functions, and exploit direction
 11. `pwn-stack-overflow-exploit-dev/` - Ret2win, ret2libc, and stack-overflow exploit scaffolding
 12. `ctf-knowledge-capture/` - Save solved cases and reusable patterns into Markdown notes
-13. `skill-maintainer/` - Turn solve feedback into the smallest safe repo upgrade
+13. `skill-maintainer/` - Turn solve feedback into the smallest safe repo upgrade and block uncontrolled skill growth
 14. `network-search-ddg/` - DuckDuckGo search fallback for external research
 15. `browser-automation-playwright/` - Headless browser control for XSS and DOM workflows
 
