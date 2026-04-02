@@ -77,6 +77,8 @@ Try, in order:
 
 If `file://` is blocked, continue with internal HTTP paths and config endpoints.
 
+**Checkpoint:** If any file read already reveals the flag (flag file, config secret, environment variable, database credential that _is_ the flag), stop here. Skip remaining steps and proceed to documentation.
+
 ### 4. Read Source and Config
 
 Prioritize:
@@ -134,6 +136,7 @@ Read the flag with the smallest command that works.
 
 ## Decision Rules
 
+- If `file:///` read already reveals the flag (e.g., flag file, config secret, environment variable), stop — no need to pivot to localhost or attempt RCE. Many CTF challenges only require SSRF + file read.
 - If `file:///etc/passwd` works, immediately try reading source before blind fuzzing.
 - If source reveals localhost-only logic, pivot there before directory brute force.
 - If the first localhost request returns empty content, retry against `127.0.0.1/` without the public port.

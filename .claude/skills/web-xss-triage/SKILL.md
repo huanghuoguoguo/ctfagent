@@ -60,12 +60,15 @@ python3 .claude/skills/browser-automation-playwright/scripts/browser_ctl.py \
 
 ## Probe Order
 
+Event-handler vectors precede script tags because basic WAFs and CSP policies often block `<script>` but miss inline event handlers.
+
 Start with this order:
 
 1. Benign marker such as `XSSMARK`
-2. `<script>alert(1)</script>`
-3. `"><svg/onload=alert(1)>`
-4. `</script><script>alert(1)</script>`
+2. `<img src=x onerror=alert(1)>` (event handler, no script tag)
+3. `"><svg/onload=alert(1)>` (attribute breakout + event handler)
+4. `<script>alert(1)</script>` (classic script tag)
+5. `</script><script>alert(1)</script>` (script context escape)
 
 Interpret them like this:
 

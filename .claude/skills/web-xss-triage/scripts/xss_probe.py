@@ -10,8 +10,9 @@ import urllib.request
 
 PROBES = [
     {"id": "marker", "payload": "XSSMARK"},
-    {"id": "script_tag", "payload": "<script>alert(1)</script>"},
+    {"id": "img_onerror", "payload": "<img src=x onerror=alert(1)>"},
     {"id": "attr_break", "payload": '"><svg/onload=alert(1)>'},
+    {"id": "script_tag", "payload": "<script>alert(1)</script>"},
     {"id": "script_breakout", "payload": "</script><script>alert(1)</script>"},
 ]
 

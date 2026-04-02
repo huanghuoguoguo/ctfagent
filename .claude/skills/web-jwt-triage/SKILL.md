@@ -48,6 +48,15 @@ python3 .claude/skills/web-jwt-triage/scripts/jwt_tool.py bruteforce-hs256 \
   --wordlist ./secrets.txt
 ```
 
+Forge a token via RS256→HS256 key confusion (sign with the server's public key as HMAC secret):
+
+```bash
+python3 .claude/skills/web-jwt-triage/scripts/jwt_tool.py rs-to-hs \
+  --token 'eyJ...' \
+  --set role=admin \
+  --pubkey ./server_pub.pem
+```
+
 ## Workflow
 
 1. Decode the header and payload.
@@ -67,7 +76,8 @@ Use this order unless the target strongly suggests otherwise:
 1. Inspect the token with `jwt_tool.py inspect`
 2. If `alg` is `HS256`, check for weak shared secrets
 3. If the server appears to trust unsigned tokens, try `alg=none`
-4. If headers include `kid`, `jku`, or `jwk`, treat it as a key-selection problem, not just a claim-tampering problem
+4. If original `alg` is `RS256`/`RS384`/`RS512` and the public key is obtainable (e.g., `/jwks.json`, `/.well-known/jwks.json`, exposed certificate), try signing with `HS256` using the public key as the HMAC secret
+5. If headers include `kid`, `jku`, or `jwk`, treat it as a key-selection problem, not just a claim-tampering problem
 
 ## Interpretation Hints
 
@@ -78,6 +88,11 @@ Use this order unless the target strongly suggests otherwise:
 - `HS256` with a weak secret:
   - Re-sign the token instead of leaving it unsigned
   - Keep `typ` and other expected fields stable unless the target proves otherwise
+
+- `RS256` token and public key is accessible:
+  - Try algorithm confusion: re-sign the token as `HS256` using the raw public key bytes as the HMAC secret
+  - Fetch the key from `/jwks.json`, `/.well-known/jwks.json`, or any exposed certificate endpoint
+  - If the server uses the same key-lookup path for both RSA and HMAC verification, the forged token will validate
 
 - `kid` / `jku` / `jwk` present:
   - The server may be loading keys from attacker-controlled metadata

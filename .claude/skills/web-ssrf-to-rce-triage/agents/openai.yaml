@@ -1,4 +1,0 @@
-interface:
-  display_name: "Web SSRF to RCE Triage"
-  short_description: "CTF SSRF and localhost RCE triage workflow"
-  default_prompt: "Use $web-ssrf-to-rce-triage to analyze a CTF web target for SSRF, local file read, source disclosure, and localhost-only RCE pivots."
