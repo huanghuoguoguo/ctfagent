@@ -7,8 +7,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from ctfagent.models import ChallengeInfo
-from ctfagent.workspace import WorkspaceManager
+_SKILLS_DIR = Path(__file__).resolve().parents[1] / ".claude" / "skills"
+if str(_SKILLS_DIR) not in sys.path:
+    sys.path.insert(0, str(_SKILLS_DIR))
+
+from __lib__.models import ChallengeInfo
+from __lib__.workspace import WorkspaceManager
 
 
 class WorkspaceManagerTest(unittest.TestCase):
@@ -63,7 +67,7 @@ class WorkspaceManagerTest(unittest.TestCase):
     def test_init_script_creates_workspace(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_path = Path(temp_dir)
-            script = Path(__file__).resolve().parents[1] / "scripts" / "init_challenge.py"
+            script = Path(__file__).resolve().parents[1] / ".claude" / "skills" / "challenge-workspace-bootstrap" / "scripts" / "init_workspace.py"
             result = subprocess.run(
                 [
                     sys.executable,

@@ -7,7 +7,11 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from ctfagent.setup_parser import parse_setup_text
+_SKILLS_DIR = Path(__file__).resolve().parents[1] / ".claude" / "skills"
+if str(_SKILLS_DIR) not in sys.path:
+    sys.path.insert(0, str(_SKILLS_DIR))
+
+from __lib__.setup_parser import parse_setup_text
 
 
 class SetupChallengeTest(unittest.TestCase):
@@ -66,7 +70,7 @@ class SetupChallengeTest(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            script = Path(__file__).resolve().parents[1] / "scripts" / "setup_challenge.py"
+            script = Path(__file__).resolve().parents[1] / ".claude" / "skills" / "setup" / "scripts" / "setup_challenge.py"
             result = subprocess.run(
                 [
                     sys.executable,
