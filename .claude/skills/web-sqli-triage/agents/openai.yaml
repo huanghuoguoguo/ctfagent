@@ -1,4 +1,0 @@
-interface:
-  display_name: "Web SQLi Triage"
-  short_description: "CTF SQL injection triage and blind SQLite extraction"
-  default_prompt: "Use $web-sqli-triage to analyze a CTF web target for SQL injection, stabilize a boolean oracle, and extract the minimal schema or flag value needed."

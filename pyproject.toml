@@ -7,6 +7,3 @@ name = "ctfagent"
 version = "0.1.0"
 description = "Minimal local runtime for challenge packaging helpers."
 requires-python = ">=3.10"
-
-[tool.setuptools]
-packages = ["ctfagent"]

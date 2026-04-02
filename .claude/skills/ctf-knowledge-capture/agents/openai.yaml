@@ -1,4 +1,0 @@
-interface:
-  display_name: "CTF Knowledge Capture"
-  short_description: "Capture writeups and reusable exploit patterns"
-  default_prompt: "Use $ctf-knowledge-capture to save a solved CTF challenge into organized local Markdown notes and extract reusable patterns for future skills."
