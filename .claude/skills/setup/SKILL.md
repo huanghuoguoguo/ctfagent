@@ -62,7 +62,7 @@ When enough challenge information is available, normalize it into `workspaces/<c
 Prefer the one-shot setup helper first when `/setup` already contains structured fields such as title, category, target, attachments, description, and constraints:
 
 ```bash
-python3 scripts/setup_challenge.py --input-file <captured-setup-text>
+python3 .claude/skills/setup/scripts/setup_challenge.py --input-file <captured-setup-text>
 ```
 
 This helper accepts labeled text like:
@@ -84,13 +84,13 @@ If the helper succeeds, immediately inspect the new workspace:
 2. Inspect it with:
 
 ```bash
-python3 scripts/show_challenge.py <workspace-dir>
+python3 .claude/skills/challenge-workspace-bootstrap/scripts/show_challenge.py <workspace-dir>
 ```
 
 3. Summarize what is now ready.
 4. Recommend the next step, usually `ctf-solver-profile` and then a category skill.
 
-If the user did not provide structured fields yet, continue with the guided flow and gather the missing basics first. When you have enough information, you may still use `python3 scripts/init_challenge.py ...` directly.
+If the user did not provide structured fields yet, continue with the guided flow and gather the missing basics first. When you have enough information, you may still use `python3 .claude/skills/challenge-workspace-bootstrap/scripts/init_workspace.py ...` directly.
 
 ## Existing Workspace
 

@@ -19,6 +19,7 @@ skill 系统的目标只有三个：
 - 题型 triage
   - `web-*`
   - `pwn-*`
+  - `rev-*`
 - 能力辅助
   - `browser-automation-playwright`
   - `network-search-ddg`

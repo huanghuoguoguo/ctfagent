@@ -38,10 +38,12 @@ Current implemented Skills:
 9. `web-xss-triage/` - Reflected and DOM XSS triage with browser-backed validation
 10. `pwn-initial-recon/` - Binary protections, libc, dangerous functions, and exploit direction
 11. `pwn-stack-overflow-exploit-dev/` - Ret2win, ret2libc, and stack-overflow exploit scaffolding
-12. `ctf-knowledge-capture/` - Save solved cases and reusable patterns into Markdown notes
-13. `skill-maintainer/` - Turn solve feedback into the smallest safe repo upgrade and block uncontrolled skill growth
-14. `network-search-ddg/` - DuckDuckGo search fallback for external research
-15. `browser-automation-playwright/` - Headless browser control for XSS and DOM workflows
+12. `pwn-canary-and-pie-follow-up/` - Canary/PIE leak strategy and combined exploit scaffolding
+13. `ctf-knowledge-capture/` - Save solved cases and reusable patterns into Markdown notes
+14. `skill-maintainer/` - Turn solve feedback into the smallest safe repo upgrade and block uncontrolled skill growth
+15. `network-search-ddg/` - DuckDuckGo search fallback for external research
+16. `browser-automation-playwright/` - Headless browser control for XSS and DOM workflows
+17. `rev-unpack-and-trace/` - Binary identification, packer detection, and static/dynamic RE triage
 
 Recommended invocation order:
 
@@ -57,12 +59,10 @@ Recommended invocation order:
 
 1. `skill-quality-bar-and-doc-alignment`
 2. `regression-target-convention`
-3. `rev-unpack-and-trace`
-4. `crypto-encoding-decision-tree`
-5. `web-backdoor-triage`
-6. `artifact-inspection-utility`
-7. `pwn-canary-and-pie-follow-up`
-8. `skill-maintainer`
+3. `crypto-encoding-decision-tree`
+4. `web-backdoor-triage`
+5. `artifact-inspection-utility`
+6. `skill-maintainer`
 
 ## Docs
 

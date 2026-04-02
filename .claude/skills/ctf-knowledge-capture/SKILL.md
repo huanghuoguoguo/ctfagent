@@ -79,7 +79,7 @@ Read `references/templates.md` when you need the exact section meanings.
 Find related notes quickly with:
 
 ```bash
-python3 scripts/query_markdown.py --kind writeup --category web --tag ssrf
+python3 .claude/skills/ctf-knowledge-capture/scripts/query_markdown.py --kind writeup --category web --tag ssrf
 ```
 
 ## Writeup Rules

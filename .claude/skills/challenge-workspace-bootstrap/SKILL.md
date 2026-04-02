@@ -27,7 +27,7 @@ Use it to create a local workspace that `cc` can read directly:
 Create a new workspace from inline text:
 
 ```bash
-python3 scripts/init_challenge.py \
+python3 .claude/skills/challenge-workspace-bootstrap/scripts/init_workspace.py \
   --title "Internal Resource Viewer" \
   --category web \
   --url http://127.0.0.1:8080/ \
@@ -38,7 +38,7 @@ python3 scripts/init_challenge.py \
 Create a new workspace from a saved statement file and attachments:
 
 ```bash
-python3 scripts/init_challenge.py \
+python3 .claude/skills/challenge-workspace-bootstrap/scripts/init_workspace.py \
   --title "Target Name" \
   --category web \
   --content-file /path/to/statement.md \
@@ -49,7 +49,7 @@ python3 scripts/init_challenge.py \
 Inspect an existing workspace:
 
 ```bash
-python3 scripts/show_challenge.py workspaces/internal-resource-viewer
+python3 .claude/skills/challenge-workspace-bootstrap/scripts/show_challenge.py workspaces/internal-resource-viewer
 ```
 
 ## Workflow
@@ -70,5 +70,5 @@ python3 scripts/show_challenge.py workspaces/internal-resource-viewer
 
 ## Notes
 
-- The bootstrap script uses the local `ctfagent` helpers only as a file-packaging utility.
+- The bootstrap script uses `__lib__` shared helpers for file packaging.
 - This repository's solving loop remains `Claude Code` + `Skills` + local tools.
