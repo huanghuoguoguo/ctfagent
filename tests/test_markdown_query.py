@@ -6,12 +6,13 @@ import tempfile
 import unittest
 from pathlib import Path
 
-_SKILLS_DIR = Path(__file__).resolve().parents[1] / ".claude" / "skills"
-if str(_SKILLS_DIR) not in sys.path:
-    sys.path.insert(0, str(_SKILLS_DIR))
+# Add src to path for imports
+_SRC_DIR = Path(__file__).resolve().parents[1] / "src"
+if str(_SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(_SRC_DIR))
 
-from __lib__.markdown import dump_frontmatter, split_frontmatter
-from __lib__.query import iter_markdown_documents, query_documents
+from tools.common.markdown import dump_frontmatter, split_frontmatter
+from memory.query import iter_markdown_documents, query_documents
 
 
 class MarkdownQueryTest(unittest.TestCase):
@@ -75,7 +76,7 @@ class MarkdownQueryTest(unittest.TestCase):
                 + "\n# SSRF Pattern\n\nPivot localhost.\n",
                 encoding="utf-8",
             )
-            script = Path(__file__).resolve().parents[1] / ".claude" / "skills" / "ctf-knowledge-capture" / "scripts" / "query_markdown.py"
+            script = Path(__file__).resolve().parents[1] / "src" / "memory" / "query.py"
             result = subprocess.run(
                 [
                     sys.executable,

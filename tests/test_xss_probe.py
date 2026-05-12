@@ -7,10 +7,9 @@ from pathlib import Path
 
 SCRIPT_PATH = (
     Path(__file__).resolve().parents[1]
-    / ".claude"
-    / "skills"
-    / "web-xss-triage"
-    / "scripts"
+    / "src"
+    / "tools"
+    / "web"
     / "xss_probe.py"
 )
 SPEC = importlib.util.spec_from_file_location("xss_probe", SCRIPT_PATH)

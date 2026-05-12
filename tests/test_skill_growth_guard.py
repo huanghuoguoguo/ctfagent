@@ -7,10 +7,9 @@ from pathlib import Path
 
 SCRIPT_PATH = (
     Path(__file__).resolve().parents[1]
-    / ".claude"
-    / "skills"
-    / "skill-maintainer"
-    / "scripts"
+    / "src"
+    / "tools"
+    / "common"
     / "skill_growth_guard.py"
 )
 SPEC = importlib.util.spec_from_file_location("skill_growth_guard", SCRIPT_PATH)
@@ -25,7 +24,7 @@ class SkillGrowthGuardTest(unittest.TestCase):
         result = skill_growth_guard.audit_growth(
             candidate_skill="web-backdoor-triage",
             frequency=3,
-            overlaps=["web-ssrf-to-rce-triage"],
+            overlaps=["web-triage"],
             duplicate_concepts=[],
             scope_stable=True,
             has_script=True,

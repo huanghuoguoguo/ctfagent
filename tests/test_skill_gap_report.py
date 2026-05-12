@@ -7,10 +7,9 @@ from pathlib import Path
 
 SCRIPT_PATH = (
     Path(__file__).resolve().parents[1]
-    / ".claude"
-    / "skills"
-    / "skill-maintainer"
-    / "scripts"
+    / "src"
+    / "tools"
+    / "common"
     / "skill_gap_report.py"
 )
 SPEC = importlib.util.spec_from_file_location("skill_gap_report", SCRIPT_PATH)
@@ -25,18 +24,18 @@ class SkillGapReportTest(unittest.TestCase):
         result = skill_gap_report.classify_gap(
             {"overlap_existing_skill", "missing_script"},
             frequency=3,
-            existing_skill="web-jwt-triage",
+            existing_skill="web-triage",
             candidate_skill=None,
         )
         self.assertEqual(result["classification"], "update_skill")
-        self.assertIn("update web-jwt-triage/SKILL.md", result["actions"])
+        self.assertIn("update web-triage/SKILL.md", result["actions"])
 
     def test_missing_script_prefers_new_script(self) -> None:
         result = skill_gap_report.classify_gap(
             {"repeated_manual_step", "missing_script"},
             frequency=2,
             existing_skill=None,
-            candidate_skill="web-xss-triage",
+            candidate_skill="web-triage",
         )
         self.assertEqual(result["classification"], "new_script")
 
@@ -45,10 +44,10 @@ class SkillGapReportTest(unittest.TestCase):
             {"repeated_pattern"},
             frequency=2,
             existing_skill=None,
-            candidate_skill="web-xss-triage",
+            candidate_skill="web-triage",
         )
         self.assertEqual(result["classification"], "new_skill")
-        self.assertIn("create web-xss-triage/SKILL.md", result["actions"])
+        self.assertIn("create web-triage/SKILL.md", result["actions"])
         self.assertIn("run skill_growth_guard.py before creating the new directory", result["actions"])
 
     def test_one_off_goes_to_backlog(self) -> None:

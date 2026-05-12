@@ -1,12 +1,10 @@
 ---
+doc_kind: pattern
 title: "SSRF to LFI to Localhost RCE"
 category: web
 slug: ssrf-to-lfi-to-localhost-rce
 created: 2026-03-28
 status: draft
-tags:
-  []
-doc_kind: pattern
 ---
 # SSRF to LFI to Localhost RCE
 

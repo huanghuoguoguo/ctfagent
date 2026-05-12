@@ -7,10 +7,9 @@ from pathlib import Path
 
 SCRIPT_PATH = (
     Path(__file__).resolve().parents[1]
-    / ".claude"
-    / "skills"
-    / "web-ssti-triage"
-    / "scripts"
+    / "src"
+    / "tools"
+    / "web"
     / "ssti_probe.py"
 )
 SPEC = importlib.util.spec_from_file_location("ssti_probe", SCRIPT_PATH)

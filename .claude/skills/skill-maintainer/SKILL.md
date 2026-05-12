@@ -35,8 +35,8 @@ If the evidence is thin, choose `backlog_only`.
 Classify a feedback bundle:
 
 ```bash
-python3 .claude/skills/skill-maintainer/scripts/skill_gap_report.py \
-  --existing-skill web-jwt-triage \
+python3 src/tools/common/skill_gap_report.py \
+  --existing-skill web-triage \
   --signal repeated_manual_step \
   --signal missing_script \
   --signal missing_test \
@@ -46,14 +46,14 @@ python3 .claude/skills/skill-maintainer/scripts/skill_gap_report.py \
 Check inventory drift and duplicate roadmap entries:
 
 ```bash
-python3 .claude/skills/skill-maintainer/scripts/check_skill_inventory.py \
+python3 src/tools/common/check_skill_inventory.py \
   --root .
 ```
 
 Audit whether a proposed new skill is mature enough to exist:
 
 ```bash
-python3 .claude/skills/skill-maintainer/scripts/skill_growth_guard.py \
+python3 src/tools/common/skill_growth_guard.py \
   --candidate-skill web-backdoor-triage \
   --frequency 3 \
   --scope-stable \

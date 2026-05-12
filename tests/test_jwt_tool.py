@@ -8,10 +8,9 @@ from pathlib import Path
 
 SCRIPT_PATH = (
     Path(__file__).resolve().parents[1]
-    / ".claude"
-    / "skills"
-    / "web-jwt-triage"
-    / "scripts"
+    / "src"
+    / "tools"
+    / "web"
     / "jwt_tool.py"
 )
 SPEC = importlib.util.spec_from_file_location("jwt_tool", SCRIPT_PATH)

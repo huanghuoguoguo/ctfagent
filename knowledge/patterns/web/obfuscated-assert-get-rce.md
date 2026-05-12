@@ -1,4 +1,5 @@
 ---
+doc_kind: pattern
 title: "Obfuscated assert GET RCE"
 category: web
 slug: obfuscated-assert-get-rce
@@ -11,7 +12,6 @@ tags:
   - webshell
   - blank-page
   - obfuscation
-doc_kind: pattern
 ---
 # Obfuscated assert GET RCE
 

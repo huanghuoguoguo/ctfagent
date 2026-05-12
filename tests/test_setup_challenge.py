@@ -7,11 +7,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
-_SKILLS_DIR = Path(__file__).resolve().parents[1] / ".claude" / "skills"
-if str(_SKILLS_DIR) not in sys.path:
-    sys.path.insert(0, str(_SKILLS_DIR))
+# Add src to path for imports
+_SRC_DIR = Path(__file__).resolve().parents[1] / "src"
+if str(_SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(_SRC_DIR))
 
-from __lib__.setup_parser import parse_setup_text
+from tools.workspace.setup_parser import parse_setup_text
 
 
 class SetupChallengeTest(unittest.TestCase):
@@ -70,7 +71,7 @@ class SetupChallengeTest(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            script = Path(__file__).resolve().parents[1] / ".claude" / "skills" / "setup" / "scripts" / "setup_challenge.py"
+            script = Path(__file__).resolve().parents[1] / "src" / "tools" / "workspace" / "setup_challenge.py"
             result = subprocess.run(
                 [
                     sys.executable,

@@ -111,7 +111,7 @@ After solving, save the case with `ctf-knowledge-capture`.
 ## Interaction With Other Skills
 
 - Start with this skill first.
-- Then invoke one concrete category skill such as `web-ssrf-to-rce-triage`.
+- Then invoke one concrete category skill such as `web-triage` or `pwn-triage`.
 - Do not load multiple heavy category skills unless the evidence genuinely spans them.
 - If a solve reveals a repeated pattern, record it in `knowledge/patterns/` and only then update the category skill.
 

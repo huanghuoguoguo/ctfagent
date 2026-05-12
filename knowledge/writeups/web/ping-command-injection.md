@@ -1,4 +1,5 @@
 ---
+doc_kind: writeup
 title: "Ping Tool Command Injection"
 category: web
 slug: ping-command-injection
@@ -9,7 +10,6 @@ tags:
   - rce
   - ping
   - localhost
-doc_kind: writeup
 ---
 # Ping Tool Command Injection
 

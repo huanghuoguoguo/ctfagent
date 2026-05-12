@@ -1,4 +1,5 @@
 ---
+doc_kind: writeup
 title: "SQLite Boolean Blind SQL Injection"
 category: web
 slug: sqlite-blind-sql-injection
@@ -8,7 +9,6 @@ tags:
   - blind-sqli
   - sqlite
   - boolean-based
-doc_kind: writeup
 ---
 # SQLite Boolean Blind SQL Injection
 

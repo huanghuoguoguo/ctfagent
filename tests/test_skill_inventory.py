@@ -7,10 +7,9 @@ from pathlib import Path
 
 SCRIPT_PATH = (
     Path(__file__).resolve().parents[1]
-    / ".claude"
-    / "skills"
-    / "skill-maintainer"
-    / "scripts"
+    / "src"
+    / "tools"
+    / "common"
     / "check_skill_inventory.py"
 )
 SPEC = importlib.util.spec_from_file_location("check_skill_inventory", SCRIPT_PATH)
@@ -29,26 +28,26 @@ class SkillInventoryTest(unittest.TestCase):
         text = """
 ## Active Skills
 1. `ctf-solver-profile/` - ...
-2. `web-jwt-triage/` - ...
+2. `web-triage/` - ...
 
 ## Roadmap
 """
         self.assertEqual(
             check_skill_inventory.parse_claude_active_skills(text),
-            ["ctf-solver-profile", "web-jwt-triage"],
+            ["ctf-solver-profile", "web-triage"],
         )
 
     def test_parse_roadmap_priorities(self) -> None:
         text = """
 ## Roadmap
-1. `web-xss-triage`
-2. `web-backdoor-triage`
+1. `web-backdoor-triage`
+2. `crypto-triage`
 
 ## MCP Tools to Integrate (Future)
 """
         self.assertEqual(
             check_skill_inventory.parse_roadmap_priorities(text),
-            ["web-xss-triage", "web-backdoor-triage"],
+            ["web-backdoor-triage", "crypto-triage"],
         )
 
 

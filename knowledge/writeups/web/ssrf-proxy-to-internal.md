@@ -1,4 +1,5 @@
 ---
+doc_kind: writeup
 title: "SSRF Proxy to Internal Host"
 category: web
 slug: ssrf-proxy-to-internal
@@ -8,7 +9,6 @@ tags:
   - ssrf
   - internal-host
   - proxy
-doc_kind: writeup
 ---
 # SSRF Proxy to Internal Host
 

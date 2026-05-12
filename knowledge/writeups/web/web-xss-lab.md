@@ -4,7 +4,7 @@ title: "Web XSS Lab - Reflected and DOM XSS"
 category: web
 slug: web-xss-lab
 created: 2026-03-29
-status: completed
+status: solved
 tags:
   - xss
   - reflected-xss

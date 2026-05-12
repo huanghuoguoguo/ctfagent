@@ -5,128 +5,140 @@ description: Capture solved CTF challenges into organized local Markdown knowled
 
 # CTF Knowledge Capture
 
-Use this skill after solving or reviewing a challenge. The goal is not to write a polished blog post. The goal is to preserve:
+Use this skill after solving or reviewing a challenge. The goal is to preserve:
 
 - what the challenge was
 - how the exploit chain worked
 - what misled you
 - what reusable pattern should influence future skills
 
-Always save notes to local Markdown files under `knowledge/`.
+## CRITICAL: Programmatic Access Only
 
-Use frontmatter metadata consistently so future agents can query notes by `doc_kind`, `category`, `status`, and `tags`.
+**You must NEVER manually edit files in `knowledge/`.** All memory operations must go through the schema module:
+
+```bash
+# Create writeup (ONLY valid way)
+python3 -c "
+from pathlib import Path
+from src.memory.schema import create_writeup, update_index
+
+path = create_writeup(
+    Path('.'),
+    title='Challenge Name',
+    category='web',
+    slug='challenge-name',
+    source='CTF Platform',
+    target='http://target:port',
+    tags=['ssrf', 'rce'],
+    status='solved'
+)
+update_index(Path('.'))
+print(path)
+"
+
+# Create pattern (ONLY valid way)
+python3 -c "
+from pathlib import Path
+from src.memory.schema import create_pattern, update_index
+
+path = create_pattern(
+    Path('.'),
+    title='SSRF to LFI to RCE',
+    category='web',
+    slug='ssrf-lfi-rce',
+    chain_summary='SSRF via URL fetcher to file:// read to localhost RCE',
+    tags=['ssrf', 'lfi', 'rce'],
+    status='active'
+)
+update_index(Path('.'))
+print(path)
+"
+
+# Query existing notes
+python3 src/memory/query.py --root . --kind writeup --category web --tag ssrf
+
+# Validate all knowledge files
+python3 -c "
+from pathlib import Path
+from src.memory.schema import validate_all
+errors = validate_all(Path('.'))
+for path, msgs in errors.items():
+    print(f'{path}: {msgs}')
+"
+```
+
+**Violations:**
+- Do NOT use `Write` tool on `knowledge/*.md`
+- Do NOT use `Edit` tool on `knowledge/*.md`
+- Do NOT manually create files in `knowledge/`
+
+## Schema Enforcement
+
+All notes are validated against strict schemas:
+
+**Writeup required fields:**
+- `title` - Challenge name
+- `category` - web/pwn/rev/crypto/misc/forensics
+- `slug` - Stable file identifier
+- `status` - draft/solved/archived
+
+**Pattern required fields:**
+- `title` - Pattern name
+- `category` - Category
+- `slug` - Stable file identifier
+- `status` - draft/active/archived
 
 ## Output Layout
 
-Use this structure:
-
 ```text
 knowledge/
-├── index.md
+├── index.md              # Auto-generated, do not edit
 ├── writeups/
-│   ├── web/
-│   ├── pwn/
-│   ├── rev/
-│   ├── crypto/
-│   ├── misc/
-│   └── forensics/
+│   └── web/
+│       └── slug.md
 └── patterns/
-    ├── web/
-    ├── pwn/
-    ├── rev/
-    ├── crypto/
-    ├── misc/
-    └── forensics/
+    └── web/
+        └── slug.md
 ```
-
-Use `writeups/` for one concrete target. Use `patterns/` for reusable chains such as `ssrf-to-lfi-to-localhost-rce`.
 
 ## Workflow
 
-1. Decide the category.
-2. Create or update one writeup file.
-3. Decide whether the solve teaches a reusable pattern.
-4. Create or update one pattern file if needed.
-5. Update `knowledge/index.md` with links.
-6. If the pattern changes future solving behavior, update the related skill separately.
+1. Validate the solve is complete.
+2. Create writeup via `create_writeup()`.
+3. Fill in the body content (you CAN edit the body after creation).
+4. Decide if pattern is needed, create via `create_pattern()`.
+5. Run `update_index()` to regenerate index.
+6. If pattern affects future solving, update related skill.
 
-## Quick Start
+## Writeup Body Sections
 
-Create a new writeup scaffold:
+After programmatic creation, fill in:
 
-```bash
-python3 .claude/skills/ctf-knowledge-capture/scripts/new_note.py \
-  --root . \
-  --kind writeup \
-  --category web \
-  --slug internal-resource-viewer \
-  --title "Internal Resource Viewer"
-```
+- **Challenge Summary** - Source, target, goal
+- **Initial Signals** - Entry point, hints, first probe
+- **Exploit Chain** - Numbered steps
+- **Key Evidence** - What confirmed the path
+- **Dead Ends** - What didn't work
+- **Payloads And Commands** - Working code
+- **Flag / Outcome** - Result
+- **Reusable Lessons** - What to remember
+- **Pattern Candidates** - Link to patterns
 
-Create a new reusable pattern scaffold:
+## Pattern Body Sections
 
-```bash
-python3 .claude/skills/ctf-knowledge-capture/scripts/new_note.py \
-  --root . \
-  --kind pattern \
-  --category web \
-  --slug ssrf-to-lfi-to-localhost-rce \
-  --title "SSRF to LFI to Localhost RCE"
-```
-
-Read `references/templates.md` when you need the exact section meanings.
-
-Find related notes quickly with:
-
-```bash
-python3 .claude/skills/ctf-knowledge-capture/scripts/query_markdown.py --kind writeup --category web --tag ssrf
-```
-
-## Writeup Rules
-
-Every writeup must answer these questions:
-
-- What was the vulnerable surface?
-- What evidence proved the intended exploit path?
-- What dead ends or false assumptions slowed the solve?
-- What was the minimal working exploit chain?
-- Which detail should be promoted into a reusable pattern or skill rule?
-
-Keep writeups concise. Prefer factual bullets over long prose.
-
-## Pattern Rules
-
-Create or update a pattern note only when the lesson generalizes across multiple challenges.
-
-A pattern note should contain:
-
-- the chain name
-- preconditions
-- cheap probes
-- telltale evidence
-- common mistakes
-- escalation order
-- example payload shapes
-- links to supporting writeups
-
-Do not turn every challenge into a new pattern. A one-off trick belongs only in the writeup.
+- **Chain Summary** - One-line description
+- **Preconditions** - When this applies
+- **Cheap Probes** - Quick tests
+- **Telltale Evidence** - What to look for
+- **Escalation Order** - Step sequence
+- **Common Mistakes** - What to avoid
+- **Payload Shapes** - Example payloads
+- **Related Writeups** - Links
+- **Skill Impact** - What skill to update
 
 ## Decision Rules
 
-- If the solve has one target-specific quirk, update only the writeup.
-- If the same branch will likely appear again, update or create a pattern note.
-- If the pattern changes the order of operations in future solving, update the related skill after saving the knowledge files.
-- If the note becomes long, compress narrative and keep only evidence, chain, and reusable lessons.
-
-## Maintenance
-
-Use `knowledge/index.md` as the table of contents.
-
-Keep each note easy to grep:
-
-- use stable slugs in file names
-- use one H1 only
-- keep exploit chain in its own section
-- include keywords such as `ssrf`, `lfi`, `localhost`, `rce`
-
-Read `references/templates.md` before changing note structure. Keep template changes centralized there instead of drifting formats across many files.
+- One-off trick → writeup only
+- Repeated pattern → create pattern note
+- Pattern changes solving order → update skill
+- Keep notes concise, grep-friendly
